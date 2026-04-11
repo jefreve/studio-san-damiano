@@ -1,0 +1,12 @@
+{
+  "navbar": {
+    "trattamenti": "Treatments",
+    "filosofia": "Philosophy",
+    "equipe": "Equipe",
+    "contatti": "Contacts"
+  },
+  "home": {
+    "welcome": "Welcome to Studio San Damiano",
+    "description": "Medical excellence at the service of your health."
+  }
+}
