@@ -1,9 +1,13 @@
 {
   "navbar": {
-    "trattamenti": "Treatments",
-    "filosofia": "Philosophy",
-    "equipe": "Equipe",
-    "contatti": "Contacts"
+    "trattamenti": "TREATMENTS",
+    "soluzioni": "AESTHETIC SOLUTIONS",
+    "filosofia": "PHILOSOPHY",
+    "equipe": "MEDICAL TEAM",
+    "formazione": "TRAINING",
+    "contatti": "CONTACTS",
+    "press": "PRESS",
+    "blog": "BLOG"
   },
   "home": {
     "welcome": "Welcome to Studio San Damiano",
