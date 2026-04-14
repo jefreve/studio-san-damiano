@@ -9,7 +9,7 @@ import { reviewsData, Review } from "@/data/reviewsData";
 // --- Sub-component: ReviewCard ---
 function ReviewCard({ review }: { review: Review }) {
   return (
-    <div className="flex-shrink-0 w-[380px] md:w-[400px] h-[460px] bg-white/90 backdrop-blur-md border border-white/20 rounded-sm shadow-sm hover:shadow-xl transition-all duration-500 hover:-translate-y-2 group flex flex-col overflow-hidden snap-start">
+    <div className="flex-shrink-0 w-[88vw] md:w-[400px] h-auto min-h-[420px] md:h-[460px] bg-white/90 backdrop-blur-md border border-white/20 rounded-sm shadow-sm md:hover:shadow-xl transition-all duration-500 md:hover:-translate-y-2 group flex flex-col overflow-hidden snap-center md:snap-start touch-auto">
       {/* 1. Fixed Header: Stars */}
       <div className="p-10 pb-0 flex-shrink-0">
         <div className="flex gap-0.5">
@@ -19,8 +19,8 @@ function ReviewCard({ review }: { review: Review }) {
         </div>
       </div>
 
-      {/* 2. Content: Review Text (Scrollable only on hover) */}
-      <div className="px-10 py-6 flex-1 overflow-hidden group-hover:overflow-y-auto custom-scrollbar">
+      {/* 2. Content: Review Text */}
+      <div className="px-10 py-6 flex-1 overflow-visible md:overflow-hidden md:group-hover:overflow-y-auto custom-scrollbar">
         <p className="text-brand-grey/80 font-light leading-relaxed italic text-sm">
           "{review.text}"
         </p>
@@ -73,9 +73,40 @@ function ReviewCard({ review }: { review: Review }) {
 export default function ReviewsSection({ dictionary }: { dictionary: any }) {
   const scrollRef = useRef<HTMLDivElement>(null);
   const [isPaused, setIsPaused] = useState(false);
+  const [canScrollLeft, setCanScrollLeft] = useState(false);
+  const [canScrollRight, setCanScrollRight] = useState(true);
 
-  // Show only once
   const displayReviews = reviewsData;
+
+  const updateScrollButtons = () => {
+    if (scrollRef.current) {
+      const container = scrollRef.current;
+      const innerWrapper = container.children[0];
+      const cards = Array.from(innerWrapper.children) as HTMLDivElement[];
+      
+      const containerCenter = container.scrollLeft + container.clientWidth / 2;
+      let closestIndex = 0;
+      let minDistance = Infinity;
+
+      cards.forEach((card, index) => {
+        const cardCenter = card.offsetLeft + card.clientWidth / 2;
+        const distance = Math.abs(containerCenter - cardCenter);
+        if (distance < minDistance) {
+          minDistance = distance;
+          closestIndex = index;
+        }
+      });
+
+      setCanScrollLeft(closestIndex > 0);
+      setCanScrollRight(closestIndex < reviewsData.length - 1);
+    }
+  };
+
+  useEffect(() => {
+    updateScrollButtons();
+    window.addEventListener("resize", updateScrollButtons);
+    return () => window.removeEventListener("resize", updateScrollButtons);
+  }, []);
 
   // Auto-scroll logic (Stops at the end)
   useEffect(() => {
@@ -109,9 +140,33 @@ export default function ReviewsSection({ dictionary }: { dictionary: any }) {
 
   const handleArrowScroll = (direction: "left" | "right") => {
     if (scrollRef.current) {
-      const scrollAmount = 424; // Card width + gap
-      scrollRef.current.scrollBy({
-        left: direction === "left" ? -scrollAmount : scrollAmount,
+      const container = scrollRef.current;
+      const innerWrapper = container.children[0];
+      const cards = Array.from(innerWrapper.children) as HTMLDivElement[];
+      
+      // Find the card closest to the center
+      const containerCenter = container.scrollLeft + container.clientWidth / 2;
+      let closestIndex = 0;
+      let minDistance = Infinity;
+
+      cards.forEach((card, index) => {
+        const cardCenter = card.offsetLeft + card.clientWidth / 2;
+        const distance = Math.abs(containerCenter - cardCenter);
+        if (distance < minDistance) {
+          minDistance = distance;
+          closestIndex = index;
+        }
+      });
+
+      const nextIndex = direction === "left" 
+        ? Math.max(0, closestIndex - 1) 
+        : Math.min(cards.length - 1, closestIndex + 1);
+
+      const targetCard = cards[nextIndex];
+      const targetScroll = targetCard.offsetLeft - (container.clientWidth / 2) + (targetCard.clientWidth / 2);
+
+      container.scrollTo({
+        left: targetScroll,
         behavior: "smooth"
       });
     }
@@ -122,20 +177,26 @@ export default function ReviewsSection({ dictionary }: { dictionary: any }) {
       <div className="container mx-auto px-6">
         {/* Social Proof Header - Centered Style */}
         <div className="flex flex-col items-center mb-20 max-w-4xl mx-auto text-center">
-          <div className="flex items-center gap-1.5 mb-6">
-            {[...Array(5)].map((_, i) => (
-              <Star key={i} className="w-4 h-4 fill-[#FBBF24] text-[#FBBF24]" />
-            ))}
-            <span className="ml-2 text-xs font-bold text-brand-grey/40 uppercase tracking-[0.3em]">
-              5.0 SU GOOGLE • 96 RECENSIONI
+          <div className="flex flex-col md:flex-row items-center gap-1.5 md:gap-3 mb-6">
+            <div className="flex items-center gap-1.5 order-1">
+              {[...Array(5)].map((_, i) => (
+                <Star key={i} className="w-4 h-4 fill-[#FBBF24] text-[#FBBF24]" />
+              ))}
+              <span className="ml-2 text-xs font-bold text-brand-grey/40 uppercase tracking-[0.3em]">
+                5.0 SU GOOGLE
+              </span>
+            </div>
+            <span className="hidden md:inline text-brand-grey/20">•</span>
+            <span className="text-xs font-bold text-brand-grey/40 uppercase tracking-[0.3em] order-2">
+              96 RECENSIONI
             </span>
           </div>
           
-          <h2 className="text-4xl md:text-5xl font-raleway font-bold text-brand-grey leading-tight mb-6 tracking-tight">
-            La voce dei <span className="text-brand-grey/40">nostri pazienti.</span>
+          <h2 className="text-4xl md:text-6xl font-raleway font-bold text-brand-grey leading-tight mb-8 tracking-tight">
+            La voce dei<br className="md:hidden" /> <span className="text-brand-grey/40">nostri pazienti.</span>
           </h2>
           
-          <p className="text-brand-grey/80 text-lg md:text-xl font-bold leading-relaxed max-w-2xl">
+          <p className="text-brand-grey/80 text-base md:text-xl font-bold leading-relaxed max-w-2xl">
             La fiducia delle persone è il nostro miglior biglietto da visita.
           </p>
         </div>
@@ -169,27 +230,34 @@ export default function ReviewsSection({ dictionary }: { dictionary: any }) {
             -ms-overflow-style: none;
             scrollbar-width: none;
           }
+          .scroll-container {
+            overscroll-behavior-x: contain;
+            scroll-snap-type: x mandatory;
+          }
         `}</style>
 
         {/* Navigation Arrows */}
         <button 
           onClick={() => handleArrowScroll("left")}
-          className="absolute left-8 top-1/2 -translate-y-1/2 z-30 p-4 bg-white/40 backdrop-blur-md border border-white/50 rounded-full opacity-0 group-hover/carousel:opacity-100 transition-all hover:bg-white hover:scale-110 text-brand-grey shadow-lg hidden md:flex"
+          className={`absolute left-2 md:left-8 top-1/2 -translate-y-1/2 z-30 p-2 md:p-4 bg-white/60 backdrop-blur-md border border-white/50 rounded-full md:opacity-0 group-hover/carousel:opacity-100 transition-all hover:bg-white hover:scale-110 text-brand-grey shadow-lg flex items-center justify-center 
+            ${!canScrollLeft ? "opacity-20 pointer-events-none" : ""}`}
         >
-          <ChevronLeft className="w-6 h-6" />
+          <ChevronLeft className="w-5 h-5 md:w-6 md:h-6" />
         </button>
         <button 
           onClick={() => handleArrowScroll("right")}
-          className="absolute right-8 top-1/2 -translate-y-1/2 z-30 p-4 bg-white/40 backdrop-blur-md border border-white/50 rounded-full opacity-0 group-hover/carousel:opacity-100 transition-all hover:bg-white hover:scale-110 text-brand-grey shadow-lg hidden md:flex"
+          className={`absolute right-2 md:right-8 top-1/2 -translate-y-1/2 z-30 p-2 md:p-4 bg-white/60 backdrop-blur-md border border-white/50 rounded-full md:opacity-0 group-hover/carousel:opacity-100 transition-all hover:bg-white hover:scale-110 text-brand-grey shadow-lg flex items-center justify-center 
+            ${!canScrollRight ? "opacity-20 pointer-events-none" : ""}`}
         >
           <ChevronRight className="w-6 h-6" />
         </button>
 
         <div 
           ref={scrollRef}
-          className="flex overflow-x-auto scrollbar-hide cursor-grab active:cursor-grabbing px-6 container mx-auto snap-x snap-mandatory touch-pan-x"
+          onScroll={updateScrollButtons}
+          className="flex overflow-x-auto scrollbar-hide cursor-grab active:cursor-grabbing px-6 container mx-auto scroll-container touch-auto"
         >
-          <div className="flex gap-6 pr-6">
+          <div className="flex gap-6 pr-6 py-4">
             {displayReviews.map((review, index) => (
               <ReviewCard key={`${review.id}-${index}`} review={review} />
             ))}
