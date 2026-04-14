@@ -71,7 +71,6 @@ function ReviewCard({ review }: { review: Review }) {
 
 // --- Main Component: ReviewsSection ---
 export default function ReviewsSection({ dictionary }: { dictionary: any }) {
-  const [isModalOpen, setIsModalOpen] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
   const [isPaused, setIsPaused] = useState(false);
 
@@ -117,18 +116,6 @@ export default function ReviewsSection({ dictionary }: { dictionary: any }) {
       });
     }
   };
-
-  // Prevent background scroll when modal is open
-  useEffect(() => {
-    if (isModalOpen) {
-      document.body.style.overflow = "hidden";
-    } else {
-      document.body.style.overflow = "unset";
-    }
-    return () => {
-      document.body.style.overflow = "unset";
-    };
-  }, [isModalOpen]);
 
   return (
     <section className="bg-[#F9EFE9] py-24 overflow-hidden">
@@ -215,8 +202,10 @@ export default function ReviewsSection({ dictionary }: { dictionary: any }) {
         <p className="text-brand-grey/40 text-xs uppercase tracking-[0.3em] mb-6 font-semibold">
           Sei già nostro paziente?
         </p>
-        <button 
-          onClick={() => setIsModalOpen(true)}
+        <a 
+          href="https://www.google.com/maps/place/Studio+San+Damiano+-+Odontoiatria+e+Medicina+Estetica/@45.4674664,9.2005203,17z/data=!4m8!3m7!1s0x4786c75768f80025:0x8c71e9e30ec30367!8m2!3d45.4674664!4d9.2005203!9m1!1b1!16s%2Fg%2F11sp4qtywp"
+          target="_blank"
+          rel="noopener noreferrer"
           className="group relative inline-flex items-center gap-3 bg-brand-grey text-white px-10 py-5 rounded-sm overflow-hidden transition-all hover:pr-12"
         >
           <span className="relative z-10 font-bold uppercase tracking-widest text-xs">
@@ -224,65 +213,8 @@ export default function ReviewsSection({ dictionary }: { dictionary: any }) {
           </span>
           <MessageSquare className="w-4 h-4 transition-all group-hover:translate-x-1" />
           <div className="absolute inset-0 bg-white/10 translate-y-full group-hover:translate-y-0 transition-transform duration-300" />
-        </button>
+        </a>
       </div>
-
-      {/* Modal for Google Maps Review */}
-      <AnimatePresence>
-        {isModalOpen && (
-          <motion.div
-            key="maps-modal-overlay"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[100] bg-black/60 backdrop-blur-sm flex items-center justify-center p-0 md:p-10"
-            onClick={() => setIsModalOpen(false)}
-          >
-            <motion.div
-              key="maps-modal-card"
-              initial={{ opacity: 0, scale: 0.95, y: 20 }}
-              animate={{ opacity: 1, scale: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.95, y: 20 }}
-              transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
-              onClick={(e) => e.stopPropagation()}
-              className="w-full h-full md:w-[90%] md:h-[90%] bg-white shadow-2xl md:rounded-sm flex flex-col overflow-hidden"
-            >
-              <div className="flex items-center justify-between p-4 md:p-6 bg-[#F6E4D8] border-b border-brand-grey/5 flex-shrink-0">
-                <div className="flex-1" />
-                <div className="flex-1 text-center overflow-hidden">
-                  <h2 className="text-lg md:text-xl font-raleway font-semibold text-brand-grey uppercase tracking-widest whitespace-nowrap">
-                    Lascia una recensione
-                  </h2>
-                </div>
-                <div className="flex-1 flex justify-end">
-                  <button onClick={() => setIsModalOpen(false)} className="p-2 hover:bg-brand-grey/5 rounded-full">
-                    <X className="w-6 h-6 text-brand-grey" />
-                  </button>
-                </div>
-              </div>
-              <div className="flex-1 relative bg-[#F9EFE9]">
-                <iframe
-                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2797.9405230489114!2d9.2005203!3d45.4674664!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x4786c75768f80025%3A0x8c71e9e30ec30367!2sStudio%20San%20Damiano%20-%20Odontoiatria%20e%20Medicina%20Estetica!5e0!3m2!1sit!2sit!4v1713100000000!5m2!1sit!2sit"
-                  className="w-full h-full border-0"
-                  allowFullScreen
-                  loading="lazy"
-                  title="Studio San Damiano Google Maps"
-                />
-                <div className="absolute bottom-6 left-1/2 -translate-x-1/2 z-20">
-                   <a 
-                    href="https://www.google.com/maps/place/Studio+San+Damiano+-+Odontoiatria+e+Medicina+Estetica/@45.4674664,9.2005203,17z/data=!4m8!3m7!1s0x4786c75768f80025:0x8c71e9e30ec30367!8m2!3d45.4674664!4d9.2005203!9m1!1b1!16s%2Fg%2F11sp4qtywp"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="bg-brand-grey text-white px-6 py-3 text-xs uppercase tracking-widest font-bold shadow-xl hover:bg-black transition-colors"
-                   >
-                     Apri in Google Maps
-                   </a>
-                </div>
-              </div>
-            </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
     </section>
   );
 }
