@@ -181,27 +181,31 @@ function CategoryCard({ category, onClick }: { category: any; onClick: () => voi
   return (
     <div 
       onClick={onClick}
-      className="group relative bg-brand-grey rounded-sm overflow-hidden h-[236px] flex items-center transition-all duration-500 hover:shadow-2xl hover:-translate-y-1 cursor-pointer border border-white/5"
+      className="group relative bg-brand-grey overflow-hidden h-[260px] flex flex-col transition-all duration-500 ease-in-out cursor-pointer border-t-8 border-b-8 border-[#F6E4D8] hover:shadow-2xl hover:scale-[1.02] hover:z-20"
     >
-      <div className="w-1/2 p-6 md:p-8 z-10 flex flex-col justify-center">
-        <h3 className="text-xl md:text-2xl text-white font-raleway font-light mb-4 leading-tight">
-          {category.title}
-        </h3>
-        <div>
-          <span className="text-white/80 text-[10px] tracking-premium uppercase border-b border-white/30 group-hover:border-white transition-colors duration-300">
-            {category.linkText}
-          </span>
+      <div className="flex-1 flex items-center relative">
+        <div className="w-1/2 p-6 md:p-10 z-10 flex flex-col justify-center">
+          <h3 className="text-2xl md:text-3xl text-white font-raleway font-bold mb-6 leading-tight">
+            {category.title}
+          </h3>
+          <div>
+            <span className="text-white/80 text-[10px] tracking-premium uppercase border-b border-white/30 group-hover:border-white transition-colors duration-300">
+              {category.linkText}
+            </span>
+          </div>
         </div>
-      </div>
-      <div className="w-1/2 h-full flex items-center justify-end pr-4 md:pr-6">
-        <div className="relative w-[180px] h-[180px] md:w-[220px] md:h-[220px] transform group-hover:scale-105 transition-transform duration-500">
-          <Image 
-            src={category.image} 
-            alt={category.title} 
-            fill 
-            sizes="(max-width: 768px) 50vw, 300px"
-            className="object-contain object-right" 
-          />
+
+        {/* Immagine pulita senza cerchio */}
+        <div className="w-1/2 h-full flex items-center justify-end pr-4 md:pr-10 relative">
+          <div className="relative w-[180px] h-[180px] md:w-[220px] md:h-[220px] transform group-hover:scale-105 transition-transform duration-500">
+            <Image 
+              src={category.image} 
+              alt={category.title} 
+              fill 
+              sizes="(max-width: 768px) 50vw, 300px"
+              className="object-contain object-right" 
+            />
+          </div>
         </div>
       </div>
     </div>
@@ -210,17 +214,30 @@ function CategoryCard({ category, onClick }: { category: any; onClick: () => voi
 
 function ListView({ category, onSelect }: { category: CategoryData; onSelect: (t: Treatment) => void }) {
   return (
-    <div className="h-full overflow-y-auto scrollbar-hide md:scrollbar-thin md:scrollbar-thumb-white/10 md:scrollbar-track-transparent px-8 py-10">
+    <div className="h-full overflow-y-auto scrollbar-hide md:scrollbar-thin md:scrollbar-thumb-white/10 md:scrollbar-track-transparent px-8 py-7">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-1">
         {category.treatments.map((treatment) => (
           <div 
             key={treatment.id}
             onClick={() => onSelect(treatment)}
-            className="group flex items-center justify-between py-2 border-b border-white/10 hover:border-brand-cream/30 cursor-pointer transition-all"
+            className="group flex items-center justify-between py-1.5 border-b border-white/10 hover:border-brand-cream/30 cursor-pointer transition-all"
           >
-            <span className="text-lg font-raleway text-white/90 group-hover:text-white group-hover:translate-x-2 transition-all">
-              {treatment.title}
-            </span>
+            <div className="flex items-center gap-4">
+              {treatment.image && (
+                <div className="relative w-9 h-9 rounded-sm overflow-hidden flex-shrink-0 border border-white/5">
+                  <Image 
+                    src={treatment.image} 
+                    alt={treatment.title} 
+                    fill 
+                    sizes="36px"
+                    className="object-cover" 
+                  />
+                </div>
+              )}
+              <span className="text-lg font-raleway text-white/90 group-hover:text-white group-hover:translate-x-1 transition-all">
+                {treatment.title}
+              </span>
+            </div>
             <ChevronRight className="w-5 h-5 text-brand-cream opacity-40 group-hover:opacity-100 group-hover:translate-x-1 transition-all" />
           </div>
         ))}
