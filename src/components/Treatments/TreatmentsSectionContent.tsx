@@ -125,7 +125,7 @@ export default function TreatmentsSectionContent({ dictionary }: { dictionary: a
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[100] bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 md:p-10"
+            className="fixed inset-0 z-[100] bg-black/60 backdrop-blur-sm flex items-center justify-center p-0 md:p-10"
             onClick={handleClose}
           >
             <motion.div
@@ -135,7 +135,7 @@ export default function TreatmentsSectionContent({ dictionary }: { dictionary: a
               exit={{ opacity: 0, scale: 0.95, y: 20 }}
               transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
               onClick={(e) => e.stopPropagation()}
-              className="w-[90%] h-[90%] bg-brand-grey shadow-2xl md:rounded-sm flex flex-col overflow-hidden border border-white/5"
+              className="w-full h-full md:w-[90%] md:h-[90%] bg-brand-grey shadow-2xl md:rounded-sm flex flex-col overflow-hidden border border-white/5"
             >
               {/* Header */}
               <div className="flex items-center justify-between p-4 md:p-6 bg-[#F6E4D8] border-b border-brand-grey/5 flex-shrink-0">
