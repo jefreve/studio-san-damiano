@@ -72,6 +72,18 @@ export default function TreatmentsSectionContent({ dictionary }: { dictionary: a
     }
   }, [searchParams]);
 
+  // Prevent background scroll when modal is open
+  useEffect(() => {
+    if (viewMode !== "GRID") {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "unset";
+    }
+    return () => {
+      document.body.style.overflow = "unset";
+    };
+  }, [viewMode]);
+
   const updateUrl = (catId?: string, treatId?: string) => {
     const params = new URLSearchParams();
     if (catId) params.set("categoria", catId);
