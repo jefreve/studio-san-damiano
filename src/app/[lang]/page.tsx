@@ -2,6 +2,7 @@ import { getDictionary } from "@/lib/get-dictionary";
 
 import HeroContent from "@/components/Hero/HeroContent";
 import TreatmentsSection from "@/components/Treatments/TreatmentsSection";
+import ReviewsSection from "@/components/Reviews/ReviewsSection";
 
 export default async function Home({
   params,
@@ -24,6 +25,9 @@ export default async function Home({
            <TreatmentsSection dictionary={dictionary} />
         </div>
       </section>
+
+      {/* Reviews Section */}
+      <ReviewsSection dictionary={dictionary} />
 
       {/* Sezione di test stabilità altezza */}
       <section className="bg-[#F0F1EF] py-32">
