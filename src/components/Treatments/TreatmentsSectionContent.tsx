@@ -83,105 +83,112 @@ export default function TreatmentsSectionContent({ dictionary }: { dictionary: a
   const handleBack = () => viewMode === "DETAIL" ? updateUrl(selectedCategory?.id) : updateUrl();
 
   return (
-    <div className="relative w-full max-w-5xl mx-auto min-h-[504px]">
-      <AnimatePresence mode="wait">
-        {viewMode === "GRID" ? (
-          <motion.div 
-            key="grid"
-            initial={{ opacity: 0, scale: 0.98 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 1.02 }}
-            transition={{ duration: 0.5, ease: [0.4, 0, 0.2, 1] }}
-            className="w-full flex flex-col items-center"
-          >
-            <div className="text-center mb-16 max-w-2xl px-4">
-              <h2 className="text-xl md:text-2xl font-raleway font-light text-brand-grey leading-relaxed">
-                Studio San Damiano: un luogo dove salute ed estetica<br />
-                si fondono per esaltare la bellezza distintiva di ogni persona.
-              </h2>
-            </div>
+    <div className="relative w-full max-w-5xl mx-auto flex flex-col items-center">
+      {/* Titolo Sezione - Sempre Visibile */}
+      <div className="text-center mb-8 px-4">
+        <h2 className="text-xl md:text-2xl font-raleway font-semibold text-brand-grey leading-relaxed whitespace-nowrap">
+          Studio San Damiano: un luogo dove salute ed estetica<br />
+          si fondono per esaltare la bellezza distintiva di ogni persona.
+        </h2>
+      </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 w-full">
-              {categories.map((category) => (
-                <CategoryCard 
-                  key={category.id} 
-                  category={category} 
-                  onClick={() => updateUrl(category.id)}
-                />
-              ))}
-            </div>
-          </motion.div>
-        ) : (
-          <motion.div 
-            key="large-card"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
-            transition={{ duration: 0.5, ease: "circOut" }}
-            className="w-full h-[504px] bg-brand-grey shadow-2xl rounded-sm flex flex-col relative overflow-hidden border border-white/5"
-          >
-            {/* Header - Fixed to top */}
-            <div className="flex items-center justify-between p-6 z-30 bg-[#F6E4D8] border-b border-brand-grey/5">
-              <div className="flex-1">
-                {viewMode === "DETAIL" && (
-                  <button 
-                    onClick={handleBack}
-                    className="group flex items-center text-brand-grey/50 hover:text-brand-grey transition-colors text-xs uppercase tracking-premium"
+      {/*
+        Wrapper a altezza fissa: 2 righe × 260px + 1 gap × 24px = 544px.
+        La grande scheda è position:absolute inset-0 → non cambia l'altezza del wrapper.
+      */}
+      <div className="w-full relative" style={{ height: "544px" }}>
+        {/* Griglia — sempre nel DOM, nascosta (opacity 0, non interagibile) quando scheda aperta */}
+        <motion.div
+          animate={{
+            opacity: viewMode === "GRID" ? 1 : 0,
+            pointerEvents: viewMode === "GRID" ? "auto" : "none",
+          }}
+          transition={{ duration: 0.3 }}
+          className="grid grid-cols-1 md:grid-cols-2 gap-6 w-full h-full"
+        >
+          {categories.map((category) => (
+            <CategoryCard
+              key={category.id}
+              category={category}
+              onClick={() => updateUrl(category.id)}
+            />
+          ))}
+        </motion.div>
+
+        {/* Scheda grande — absolute overlay, stessa altezza del wrapper */}
+        <AnimatePresence>
+          {viewMode !== "GRID" && (
+            <motion.div
+              key="large-card"
+              initial={{ opacity: 0, scale: 0.97 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.97 }}
+              transition={{ duration: 0.35, ease: "circOut" }}
+              className="absolute inset-0 bg-brand-grey shadow-2xl rounded-sm flex flex-col overflow-hidden border border-white/5 z-10"
+            >
+              {/* Header */}
+              <div className="flex items-center justify-between p-6 bg-[#F6E4D8] border-b border-brand-grey/5 flex-shrink-0">
+                <div className="flex-1">
+                  {viewMode === "DETAIL" && (
+                    <button
+                      onClick={handleBack}
+                      className="group flex items-center text-brand-grey/50 hover:text-brand-grey transition-colors text-xs uppercase tracking-premium"
+                    >
+                      <ArrowLeft className="w-4 h-4 mr-2 group-hover:-translate-x-1 transition-transform" />
+                      Indietro
+                    </button>
+                  )}
+                </div>
+
+                <div className="flex-1 text-center">
+                  <h2 className="text-base md:text-lg font-raleway font-semibold text-brand-grey uppercase tracking-[0.25em]">
+                    {viewMode === "DETAIL" ? selectedTreatment?.title : selectedCategory?.title}
+                  </h2>
+                </div>
+
+                <div className="flex-1 flex justify-end">
+                  <button
+                    onClick={handleClose}
+                    className="p-2 hover:bg-brand-grey/5 rounded-full transition-colors"
                   >
-                    <ArrowLeft className="w-4 h-4 mr-2 group-hover:-translate-x-1 transition-transform" />
-                    Indietro
+                    <X className="w-6 h-6 text-brand-grey" />
                   </button>
-                )}
-              </div>
-              
-              <div className="flex-1 text-center">
-                <h2 className="text-base md:text-lg font-raleway font-semibold text-brand-grey uppercase tracking-[0.25em]">
-                  {viewMode === "DETAIL" ? selectedTreatment?.title : selectedCategory?.title}
-                </h2>
+                </div>
               </div>
 
-              <div className="flex-1 flex justify-end">
-                <button 
-                  onClick={handleClose}
-                  className="p-2 hover:bg-brand-grey/5 rounded-full transition-colors"
-                >
-                  <X className="w-6 h-6 text-brand-grey" />
-                </button>
+              {/* Contenuto */}
+              <div className="flex-1 relative overflow-hidden">
+                <AnimatePresence mode="wait">
+                  {viewMode === "LIST" && selectedCategory && (
+                    <motion.div
+                      key={`list-${selectedCategory.id}`}
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      exit={{ opacity: 0 }}
+                      transition={{ duration: 0.25 }}
+                      className="h-full"
+                    >
+                      <ListView category={selectedCategory} onSelect={(t) => updateUrl(selectedCategory.id, t.id)} />
+                    </motion.div>
+                  )}
+                  {viewMode === "DETAIL" && selectedTreatment && (
+                    <motion.div
+                      key={`detail-${selectedTreatment.id}`}
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      exit={{ opacity: 0 }}
+                      transition={{ duration: 0.25 }}
+                      className="h-full"
+                    >
+                      <DetailView treatment={selectedTreatment} categoryId={selectedCategory?.id} />
+                    </motion.div>
+                  )}
+                </AnimatePresence>
               </div>
-            </div>
-
-            {/* View Content - Scroll controlled internally by views */}
-            <div className="flex-1 relative overflow-hidden">
-              <AnimatePresence mode="wait">
-                {viewMode === "LIST" && selectedCategory && (
-                  <motion.div
-                    key={`list-${selectedCategory.id}`}
-                    initial={{ opacity: 0, x: 20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    exit={{ opacity: 0, x: -20 }}
-                    transition={{ duration: 0.3 }}
-                    className="h-full"
-                  >
-                    <ListView category={selectedCategory} onSelect={(t) => updateUrl(selectedCategory.id, t.id)} />
-                  </motion.div>
-                )}
-                {viewMode === "DETAIL" && selectedTreatment && (
-                  <motion.div
-                    key={`detail-${selectedTreatment.id}`}
-                    initial={{ opacity: 0, x: 20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    exit={{ opacity: 0, x: -20 }}
-                    transition={{ duration: 0.3 }}
-                    className="h-full"
-                  >
-                    <DetailView treatment={selectedTreatment} categoryId={selectedCategory?.id} />
-                  </motion.div>
-                )}
-              </AnimatePresence>
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </div>
     </div>
   );
 }
@@ -222,34 +229,101 @@ function CategoryCard({ category, onClick }: { category: any; onClick: () => voi
 }
 
 function ListView({ category, onSelect }: { category: CategoryData; onSelect: (t: Treatment) => void }) {
+  const [activeTag, setActiveTag] = useState<string | null>(null);
+
+  const inestetismi = [
+    { id: "acne-e-cicatrici", label: "Acne e cicatrici" },
+    { id: "pelle-spenta-e-secca", label: "Pelle spenta e secca" },
+    { id: "rughe", label: "Rughe" },
+    { id: "lassita-cutanea", label: "Lassità cutanea" },
+    { id: "macchie-cutanee", label: "Macchie cutanee" },
+    { id: "labbra", label: "Labbra" },
+    { id: "smagliature", label: "Smagliature" },
+    { id: "iperidrosi", label: "Iperidrosi" },
+    { id: "cellulite", label: "Cellulite" },
+  ];
+
+  const filteredTreatments = activeTag 
+    ? category.treatments.filter(t => t.tags?.includes(activeTag))
+    : category.treatments;
+
+  const isAesthetic = category.id === "medicina-estetica";
+
   return (
-    <div className="h-full overflow-y-auto scrollbar-hide md:scrollbar-thin md:scrollbar-thumb-white/10 md:scrollbar-track-transparent px-8 py-7">
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-1">
-        {category.treatments.map((treatment) => (
-          <div 
-            key={treatment.id}
-            onClick={() => onSelect(treatment)}
-            className="group flex items-center justify-between py-1.5 border-b border-white/10 hover:border-brand-cream/30 cursor-pointer transition-all"
-          >
-            <div className="flex items-center gap-4">
-              {treatment.image && (
-                <div className="relative w-9 h-9 rounded-sm overflow-hidden flex-shrink-0 border border-white/5">
-                  <Image 
-                    src={treatment.image} 
-                    alt={treatment.title} 
-                    fill 
-                    sizes="36px"
-                    className="object-cover" 
-                  />
-                </div>
-              )}
-              <span className="text-lg font-raleway text-white/90 group-hover:text-white group-hover:translate-x-1 transition-all">
-                {treatment.title}
-              </span>
-            </div>
-            <ChevronRight className="w-5 h-5 text-brand-cream opacity-40 group-hover:opacity-100 group-hover:translate-x-1 transition-all" />
+    <div className="h-full flex flex-col">
+      {isAesthetic && (
+        <div className="px-8 pt-6 pb-2 border-b border-white/5 bg-white/[0.02]">
+          <p className="text-[10px] uppercase tracking-[0.2em] text-white/40 mb-4 font-bold">
+            Cosa desideri trattare?
+          </p>
+          <div className="flex flex-wrap gap-2 mb-4">
+            <button
+              onClick={() => setActiveTag(null)}
+              className={`px-3 py-1.5 rounded-sm text-[10px] uppercase tracking-wider transition-all border ${
+                activeTag === null 
+                  ? "bg-brand-cream text-brand-grey border-brand-cream" 
+                  : "bg-transparent text-white/60 border-white/10 hover:border-white/30"
+              }`}
+            >
+              Mostra tutti
+            </button>
+            {inestetismi.map((tag) => (
+              <button
+                key={tag.id}
+                onClick={() => setActiveTag(tag.id)}
+                className={`px-3 py-1.5 rounded-sm text-[10px] uppercase tracking-wider transition-all border ${
+                  activeTag === tag.id 
+                    ? "bg-brand-cream text-brand-grey border-brand-cream" 
+                    : "bg-transparent text-white/60 border-white/10 hover:border-white/30"
+                }`}
+              >
+                {tag.label}
+              </button>
+            ))}
           </div>
-        ))}
+        </div>
+      )}
+
+      <div className="flex-1 overflow-y-auto scrollbar-hide md:scrollbar-thin md:scrollbar-thumb-white/10 md:scrollbar-track-transparent px-8 py-7">
+        <AnimatePresence mode="wait">
+          <motion.div 
+            key={activeTag || "all"}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.3, ease: "easeInOut" }}
+            className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-1"
+          >
+            {filteredTreatments.map((treatment) => (
+              <div 
+                key={treatment.id}
+                onClick={() => onSelect(treatment)}
+                className="group flex items-center justify-between py-2 border-b border-white/10 hover:border-brand-cream/30 cursor-pointer transition-all"
+              >
+                <div className="flex items-center gap-4">
+                  {treatment.image && (
+                    <div className="relative w-10 h-10 rounded-sm overflow-hidden flex-shrink-0 border border-white/5">
+                      <Image 
+                        src={treatment.image} 
+                        alt={treatment.title} 
+                        fill 
+                        sizes="40px"
+                        className="object-cover" 
+                      />
+                    </div>
+                  )}
+                  <span className="text-xl font-raleway text-white/90 group-hover:text-white group-hover:translate-x-1 transition-all">
+                    {treatment.title}
+                  </span>
+                </div>
+                <ChevronRight className="w-5 h-5 text-brand-cream opacity-40 group-hover:opacity-100 group-hover:translate-x-1 transition-all" />
+              </div>
+            ))}
+            {filteredTreatments.length === 0 && (
+              <p className="text-white/40 text-sm italic py-4 col-span-2">Nessun trattamento trovato per questa selezione.</p>
+            )}
+          </motion.div>
+        </AnimatePresence>
       </div>
     </div>
   );

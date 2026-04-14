@@ -9,6 +9,7 @@ export interface Treatment {
   shortDescription: string;
   fullDescription: string;
   image?: string;
+  tags?: string[]; // Per il filtraggio (inestetismi)
   faqs?: FAQ[];
   contactInfo?: {
     phone: string;
@@ -32,21 +33,24 @@ export const treatmentsData: Record<string, CategoryData> = {
         title: "Tossina botulinica",
         shortDescription: "Trattamento per distendere le rughe d'espressione.",
         fullDescription: "La tossina botulinica è un trattamento efficace per ridurre temporaneamente le rughe d'espressione, donando al viso un aspetto più riposato e gioviale.",
-        image: "/categories/medicina-estetica/img-banner-trattamenti-medicina-estetica-botox-b.jpg"
+        image: "/categories/medicina-estetica/img-banner-trattamenti-medicina-estetica-botox-b.jpg",
+        tags: ["rughe", "labbra", "iperidrosi"]
       },
       {
         id: "filler-viso",
         title: "Filler viso, zigomi e labbra",
         shortDescription: "Volumizzazione e ridefinizione dei tratti del volto.",
         fullDescription: "Infiltrazioni di acido ialuronico per ripristinare i volumi persi, definire gli zigomi o armonizzare il contorno delle labbra.",
-        image: "/categories/medicina-estetica/img-banner-trattamenti-medicina-estetica-filler-a.jpg"
+        image: "/categories/medicina-estetica/img-banner-trattamenti-medicina-estetica-filler-a.jpg",
+        tags: ["acne-e-cicatrici", "pelle-spenta-e-secca", "rughe", "lassita-cutanea", "labbra"]
       },
       {
         id: "biorivitalizzazione",
         title: "Biorivitalizzazione",
         shortDescription: "Idratazione profonda e stimolazione del collagene.",
         fullDescription: "Trattamento biorivitalizzante che apporta nutrienti essenziali alla pelle, migliorandone elasticità, tono e luminosità.",
-        image: "/categories/medicina-estetica/img-banner-trattamenti-medicina-estetica-Biorivitalizzazioni-b.jpg"
+        image: "/categories/medicina-estetica/img-banner-trattamenti-medicina-estetica-Biorivitalizzazioni-b.jpg",
+        tags: ["acne-e-cicatrici", "pelle-spenta-e-secca", "rughe", "macchie-cutanee"]
       },
       {
         id: "iv-therapy",
@@ -60,35 +64,40 @@ export const treatmentsData: Record<string, CategoryData> = {
         title: "Definizione angoli mandibolari",
         shortDescription: "Contouring del profilo mandibolare.",
         fullDescription: "Trattamento mirato a definire e scolpire il profilo della mandibola per un volto più strutturato e armonioso.",
-        image: "/categories/medicina-estetica/img-banner-trattamenti-medicina-estetica-Definizione-angoli-mandibolari-b.jpg"
+        image: "/categories/medicina-estetica/img-banner-trattamenti-medicina-estetica-Definizione-angoli-mandibolari-b.jpg",
+        tags: ["lassita-cutanea"]
       },
       {
         id: "mesoterapia",
         title: "Mesoterapia",
         shortDescription: "Trattamento iniettivo per cellulite e adiposità.",
-        fullDescription: "Micro-iniezioni di farmaci specifici per contrastare la ritenzione idrica, la cellulite e i piccoli accumuli adiposi.",
-        image: "/categories/medicina-estetica/img-banner-trattamenti-medicina-estetica-mesoterapia-a.jpg"
+        fullDescription: "Micro-iniezioni di farmaci specifici per contrastare la ritenzione idrica, la cellulite e i piccoli acquuli adiposi.",
+        image: "/categories/medicina-estetica/img-banner-trattamenti-medicina-estetica-mesoterapia-a.jpg",
+        tags: ["pelle-spenta-e-secca", "smagliature", "cellulite"]
       },
       {
         id: "microneedling",
         title: "Microneedling",
         shortDescription: "Rigenerazione cutanea tramite micro-perforazioni.",
         fullDescription: "Tecnica che stimola la produzione naturale di elastina e collagene per trattare cicatrici, rughe e imperfezioni della pelle.",
-        image: "/categories/medicina-estetica/img-hero-trattamenti-medicina-estetica-Microlifting-a.jpg"
+        image: "/categories/medicina-estetica/img-hero-trattamenti-medicina-estetica-Microlifting-a.jpg",
+        tags: ["acne-e-cicatrici", "pelle-spenta-e-secca", "rughe", "macchie-cutanee"]
       },
       {
         id: "carbossiterapia",
         title: "Carbossiterapia",
         shortDescription: "Ossigenazione dei tessuti tramite anidride carbonica.",
         fullDescription: "Uso terapeutico dell'anidride carbonica per migliorare la microcircolazione, l'elasticità cutanea e contrastare la cellulite.",
-        image: "/categories/medicina-estetica/img-hero-trattamenti-medicina-estetica-Carbossiterapia-a.jpg"
+        image: "/categories/medicina-estetica/img-hero-trattamenti-medicina-estetica-Carbossiterapia-a.jpg",
+        tags: ["acne-e-cicatrici", "pelle-spenta-e-secca", "lassita-cutanea", "smagliature", "cellulite"]
       },
       {
         id: "peeling",
         title: "Peeling",
         shortDescription: "Esfoliazione chimica per il rinnovo cellulare.",
         fullDescription: "Trattamento esfoliante professionale per rimuovere le cellule morte, trattare macchie e uniformare la texture cutanea.",
-        image: "/categories/medicina-estetica/img-banner-trattamenti-medicina-estetica-Peeling-b.jpg"
+        image: "/categories/medicina-estetica/img-banner-trattamenti-medicina-estetica-Peeling-b.jpg",
+        tags: ["acne-e-cicatrici", "pelle-spenta-e-secca", "macchie-cutanee"]
       },
       {
         id: "rinofiller",
@@ -109,7 +118,8 @@ export const treatmentsData: Record<string, CategoryData> = {
         title: "Vitamine viso",
         shortDescription: "Cocktail vitaminici per la radiosità cutanea.",
         fullDescription: "Iniezioni superficiali di vitamine e antiossidanti per combattere lo stress ossidativo e donare luce immediata al viso.",
-        image: "/categories/medicina-estetica/img-banner-trattamenti-medicina-estetica-vitamine-viso-b.jpg"
+        image: "/categories/medicina-estetica/img-banner-trattamenti-medicina-estetica-vitamine-viso-b.jpg",
+        tags: ["pelle-spenta-e-secca", "rughe", "lassita-cutanea"]
       }
     ]
   },

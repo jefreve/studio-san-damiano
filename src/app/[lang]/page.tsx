@@ -14,12 +14,12 @@ export default async function Home({
   return (
     <div className="flex flex-col min-h-screen">
       {/* Hero Section */}
-      <section className="bg-[#F6E4D8] py-12 flex flex-col items-center overflow-hidden">
+      <section className="bg-[#F6E4D8] pt-12 pb-4 flex flex-col items-center overflow-hidden">
         <HeroContent />
       </section>
 
       {/* Services Section Container */}
-      <section className="bg-white py-24">
+      <section className="bg-white" id="trattamenti-wrapper">
         <div className="container mx-auto px-8 md:px-[32px]">
            <TreatmentsSection dictionary={dictionary} />
         </div>
