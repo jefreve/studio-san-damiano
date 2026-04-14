@@ -1,288 +1,205 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { useState, useRef, useEffect } from "react";
 import Image from "next/image";
-import { Star, MessageSquare, X, ChevronLeft, ChevronRight } from "lucide-react";
+import { Star, MessageSquare } from "lucide-react";
 import { reviewsData, Review } from "@/data/reviewsData";
 
-// --- Sub-component: ReviewCard ---
-function ReviewCard({ review }: { review: Review }) {
+const TRANSITION_MS = 380;
+
+const longestReview = reviewsData.reduce((a, b) =>
+  b.text.length > a.text.length ? b : a
+);
+
+// ─── Hook: fires once when element enters viewport ───
+function useInView(threshold = 0.3) {
+  const [inView, setInView] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const obs = new IntersectionObserver(
+      ([entry]) => { if (entry.isIntersecting) { setInView(true); obs.disconnect(); } },
+      { threshold }
+    );
+    obs.observe(el);
+    return () => obs.disconnect();
+  }, [threshold]);
+
+  return { ref, inView };
+}
+
+// ─── Staggered fade-up style helper ───
+function fadeUp(visible: boolean, delay = 0): React.CSSProperties {
+  return {
+    opacity: visible ? 1 : 0,
+    transform: visible ? "translateY(0)" : "translateY(18px)",
+    transition: `opacity 0.6s ease ${delay}ms, transform 0.6s ease ${delay}ms`,
+  };
+}
+
+// ─── Avatar Selector ───
+function AvatarSelector({ selected, onSelect }: { selected: number; onSelect: (i: number) => void }) {
   return (
-    <div className="flex-shrink-0 w-[88vw] md:w-[400px] h-auto min-h-[420px] md:h-[460px] bg-white/90 backdrop-blur-md border border-white/20 rounded-sm shadow-sm md:hover:shadow-xl transition-all duration-500 md:hover:-translate-y-2 group flex flex-col overflow-hidden snap-center md:snap-start touch-auto">
-      {/* 1. Fixed Header: Stars */}
-      <div className="p-10 pb-0 flex-shrink-0">
-        <div className="flex gap-0.5">
-          {[...Array(5)].map((_, i) => (
-            <Star key={i} className="w-4 h-4 fill-[#FBBF24] text-[#FBBF24]" />
-          ))}
-        </div>
-      </div>
-
-      {/* 2. Content: Review Text */}
-      <div className="px-10 py-6 flex-1 overflow-visible md:overflow-hidden md:group-hover:overflow-y-auto custom-scrollbar">
-        <p className="text-brand-grey/80 font-light leading-relaxed italic text-sm">
-          "{review.text}"
-        </p>
-      </div>
-
-      {/* 3. Fixed Footer: Author Info (Divided with color/line) */}
-      <div className="bg-brand-grey/[0.02] border-t border-brand-grey/5 p-8 flex-shrink-0">
-        <div className="flex items-center gap-4">
-          <div className="relative w-11 h-11 flex-shrink-0 rounded-full overflow-hidden bg-white border border-brand-grey/10 shadow-sm flex items-center justify-center">
-            {review.avatar ? (
-              <Image 
-                src={review.avatar} 
-                alt={review.author} 
-                fill 
-                sizes="44px"
-                className="object-cover object-center" 
-              />
-            ) : (
-              <span className="text-brand-grey font-bold text-base">
-                {review.author[0]}
-              </span>
-            )}
-          </div>
-          <div className="flex flex-col min-w-0">
-            <h4 className="font-raleway font-bold text-[13px] text-brand-grey uppercase tracking-wider truncate">
-              {review.author}
-            </h4>
-            <p className="text-[10px] text-brand-grey/40 uppercase tracking-widest font-semibold flex items-center gap-1.5">
-              <span className="w-1 h-1 bg-brand-grey/20 rounded-full" />
-              {review.role}
-            </p>
-          </div>
-          <div className="ml-auto flex-shrink-0">
-             <Image 
-               src="/reviews/google-icon.svg" 
-               width={16} 
-               height={16} 
-               alt="Google" 
-               sizes="16px"
-               className="opacity-70" 
-             />
-          </div>
-        </div>
-      </div>
+    <div className="flex items-center justify-center gap-4 mt-10 h-14">
+      {reviewsData.map((r, i) => (
+        <button
+          key={r.id}
+          onClick={() => onSelect(i)}
+          className={`relative rounded-full overflow-hidden border-2 flex-shrink-0 flex items-center justify-center bg-white ${
+            i === selected
+              ? "w-14 h-14 border-brand-grey shadow-lg"
+              : "w-10 h-10 border-transparent opacity-35 hover:opacity-65"
+          }`}
+          style={{ transition: "width 0.35s ease, height 0.35s ease, opacity 0.35s ease, box-shadow 0.35s ease" }}
+        >
+          {r.avatar ? (
+            <Image src={r.avatar} alt={r.author} fill sizes={i === selected ? "56px" : "40px"} className="object-cover object-center" />
+          ) : (
+            <span className={`font-bold text-brand-grey ${i === selected ? "text-sm" : "text-xs"}`}>{r.author[0]}</span>
+          )}
+        </button>
+      ))}
     </div>
   );
 }
 
-// --- Main Component: ReviewsSection ---
+// ════════════════════════════════════════
 export default function ReviewsSection({ dictionary }: { dictionary: any }) {
-  const scrollRef = useRef<HTMLDivElement>(null);
-  const [isPaused, setIsPaused] = useState(false);
-  const [canScrollLeft, setCanScrollLeft] = useState(false);
-  const [canScrollRight, setCanScrollRight] = useState(true);
+  // Header entrance
+  const { ref: headerRef, inView: headerVisible } = useInView(0.4);
 
-  const displayReviews = reviewsData;
+  // Review card entrance + navigation
+  const { ref: reviewRef, inView: reviewEntered } = useInView(0.4);
+  const [visible, setVisible] = useState(false);
+  const [idx, setIdx] = useState(0);
+  const [displayedReview, setDisplayedReview] = useState<Review>(reviewsData[0]);
+  const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  const updateScrollButtons = () => {
-    if (scrollRef.current) {
-      const container = scrollRef.current;
-      const innerWrapper = container.children[0];
-      const cards = Array.from(innerWrapper.children) as HTMLDivElement[];
-      
-      const containerCenter = container.scrollLeft + container.clientWidth / 2;
-      let closestIndex = 0;
-      let minDistance = Infinity;
+  // When the review div enters view for the first time, slide in
+  useEffect(() => {
+    if (reviewEntered) setVisible(true);
+  }, [reviewEntered]);
 
-      cards.forEach((card, index) => {
-        const cardCenter = card.offsetLeft + card.clientWidth / 2;
-        const distance = Math.abs(containerCenter - cardCenter);
-        if (distance < minDistance) {
-          minDistance = distance;
-          closestIndex = index;
-        }
-      });
-
-      setCanScrollLeft(closestIndex > 0);
-      setCanScrollRight(closestIndex < reviewsData.length - 1);
-    }
+  const go = (i: number) => {
+    if (i === idx) return;
+    setIdx(i);
+    setVisible(false);
+    if (timeoutRef.current) clearTimeout(timeoutRef.current);
+    timeoutRef.current = setTimeout(() => {
+      setDisplayedReview(reviewsData[i]);
+      setVisible(true);
+    }, TRANSITION_MS);
   };
 
-  useEffect(() => {
-    updateScrollButtons();
-    window.addEventListener("resize", updateScrollButtons);
-    return () => window.removeEventListener("resize", updateScrollButtons);
-  }, []);
-
-  // Auto-scroll logic (Stops at the end)
-  useEffect(() => {
-    let animationId: number;
-    const scrollContainer = scrollRef.current;
-    if (!scrollContainer) return;
-
-    const scroll = () => {
-      if (!isPaused && scrollContainer) {
-        const maxScroll = scrollContainer.scrollWidth - scrollContainer.clientWidth;
-        
-        if (scrollContainer.scrollLeft < maxScroll - 1) { // 1px buffer
-          scrollContainer.scrollLeft += 0.8; 
-          animationId = requestAnimationFrame(scroll);
-        }
-      } else {
-        animationId = requestAnimationFrame(scroll);
-      }
-    };
-
-    animationId = requestAnimationFrame(scroll);
-    return () => cancelAnimationFrame(animationId);
-  }, [isPaused]);
-
-  // Initial scroll position
-  useEffect(() => {
-    if (scrollRef.current) {
-      scrollRef.current.scrollLeft = 0;
-    }
-  }, []);
-
-  const handleArrowScroll = (direction: "left" | "right") => {
-    if (scrollRef.current) {
-      const container = scrollRef.current;
-      const innerWrapper = container.children[0];
-      const cards = Array.from(innerWrapper.children) as HTMLDivElement[];
-      
-      // Find the card closest to the center
-      const containerCenter = container.scrollLeft + container.clientWidth / 2;
-      let closestIndex = 0;
-      let minDistance = Infinity;
-
-      cards.forEach((card, index) => {
-        const cardCenter = card.offsetLeft + card.clientWidth / 2;
-        const distance = Math.abs(containerCenter - cardCenter);
-        if (distance < minDistance) {
-          minDistance = distance;
-          closestIndex = index;
-        }
-      });
-
-      const nextIndex = direction === "left" 
-        ? Math.max(0, closestIndex - 1) 
-        : Math.min(cards.length - 1, closestIndex + 1);
-
-      const targetCard = cards[nextIndex];
-      const targetScroll = targetCard.offsetLeft - (container.clientWidth / 2) + (targetCard.clientWidth / 2);
-
-      container.scrollTo({
-        left: targetScroll,
-        behavior: "smooth"
-      });
-    }
-  };
+  const slideStyle = (fromRight: boolean): React.CSSProperties => ({
+    opacity: visible ? 1 : 0,
+    transform: visible ? "translateX(0)" : `translateX(${fromRight ? "28px" : "-28px"})`,
+    transition: `opacity ${TRANSITION_MS}ms ease, transform ${TRANSITION_MS}ms ease`,
+  });
 
   return (
     <section className="bg-[#F9EFE9] py-24 overflow-hidden">
+
+      {/* ── Header with staggered fade-up ── */}
       <div className="container mx-auto px-6">
-        {/* Social Proof Header - Centered Style */}
-        <div className="flex flex-col items-center mb-20 max-w-4xl mx-auto text-center">
-          <div className="flex flex-col md:flex-row items-center gap-1.5 md:gap-3 mb-6">
+        <div ref={headerRef} className="flex flex-col items-center mb-20 max-w-4xl mx-auto text-center">
+
+          {/* Stars + badges */}
+          <div style={fadeUp(headerVisible, 0)} className="flex flex-col md:flex-row items-center gap-1.5 md:gap-3 mb-6">
             <div className="flex items-center gap-1.5 order-1">
-              {[...Array(5)].map((_, i) => (
-                <Star key={i} className="w-4 h-4 fill-[#FBBF24] text-[#FBBF24]" />
-              ))}
-              <span className="ml-2 text-xs font-bold text-brand-grey/40 uppercase tracking-[0.3em]">
-                5.0 SU GOOGLE
-              </span>
+              {[...Array(5)].map((_, i) => <Star key={i} className="w-4 h-4 fill-[#FBBF24] text-[#FBBF24]" />)}
+              <span className="ml-2 text-xs font-bold text-brand-grey/40 uppercase tracking-[0.3em]">5.0 SU GOOGLE</span>
             </div>
             <span className="hidden md:inline text-brand-grey/20">•</span>
-            <span className="text-xs font-bold text-brand-grey/40 uppercase tracking-[0.3em] order-2">
-              96 RECENSIONI
-            </span>
+            <span className="text-xs font-bold text-brand-grey/40 uppercase tracking-[0.3em] order-2">96 RECENSIONI</span>
           </div>
-          
-          <h2 className="text-4xl md:text-6xl font-raleway font-bold text-brand-grey leading-tight mb-8 tracking-tight">
+
+          {/* Title */}
+          <h2
+            style={fadeUp(headerVisible, 120)}
+            className="text-4xl md:text-6xl font-raleway font-bold text-brand-grey leading-tight mb-8 tracking-tight"
+          >
             La voce dei<br className="md:hidden" /> <span className="text-brand-grey/40">nostri pazienti.</span>
           </h2>
-          
-          <p className="text-brand-grey/80 text-base md:text-xl font-bold leading-relaxed max-w-2xl">
+
+          {/* Subtitle */}
+          <p
+            style={fadeUp(headerVisible, 260)}
+            className="text-brand-grey/80 text-base md:text-xl font-bold leading-relaxed max-w-2xl"
+          >
             La fiducia delle persone è il nostro miglior biglietto da visita.
           </p>
         </div>
       </div>
 
-      {/* Finite Scroll Carousel */}
-      <div 
-        className="w-full relative py-12 group/carousel"
-        onMouseEnter={() => setIsPaused(true)}
-        onMouseLeave={() => setIsPaused(false)}
-      >
-        <style jsx>{`
-          .custom-scrollbar::-webkit-scrollbar {
-            width: 3px;
-            height: 0px;
-          }
-          .custom-scrollbar::-webkit-scrollbar-track {
-            background: transparent;
-          }
-          .custom-scrollbar::-webkit-scrollbar-thumb {
-            background: rgba(58, 58, 58, 0.1);
-            border-radius: 10px;
-          }
-          .custom-scrollbar:hover::-webkit-scrollbar-thumb {
-            background: rgba(58, 58, 58, 0.2);
-          }
-          .scrollbar-hide::-webkit-scrollbar {
-            display: none;
-          }
-          .scrollbar-hide {
-            -ms-overflow-style: none;
-            scrollbar-width: none;
-          }
-          .scroll-container {
-            overscroll-behavior-x: contain;
-            scroll-snap-type: x mandatory;
-          }
-        `}</style>
+      {/* ── Review card — observed separately ── */}
+      <div className="container mx-auto px-6 max-w-4xl">
+        <div ref={reviewRef} className="flex gap-8 md:gap-14">
+          {/* Left editorial rule */}
+          <div className="flex-shrink-0 w-[2px] bg-brand-grey/20" />
 
-        {/* Navigation Arrows */}
-        <button 
-          onClick={() => handleArrowScroll("left")}
-          className={`absolute left-2 md:left-8 top-1/2 -translate-y-1/2 z-30 p-2 bg-[#5a5a5a] rounded-full text-white shadow-md flex items-center justify-center transition-opacity
-            ${!canScrollLeft ? "opacity-20 pointer-events-none" : "opacity-100"}`}
-        >
-          <ChevronLeft className="w-5 h-5" />
-        </button>
-        <button 
-          onClick={() => handleArrowScroll("right")}
-          className={`absolute right-2 md:right-8 top-1/2 -translate-y-1/2 z-30 p-2 bg-[#5a5a5a] rounded-full text-white shadow-md flex items-center justify-center transition-opacity
-            ${!canScrollRight ? "opacity-20 pointer-events-none" : "opacity-100"}`}
-        >
-          <ChevronRight className="w-5 h-5" />
-        </button>
+          <div className="flex-1 min-w-0">
+            {/* Decorative quote mark — static */}
+            <div className="font-raleway font-bold leading-none text-brand-grey/8 text-[10rem] select-none -mb-10 -mt-6">
+              &ldquo;
+            </div>
 
-        <div 
-          ref={scrollRef}
-          onScroll={updateScrollButtons}
-          className="flex overflow-x-auto scrollbar-hide cursor-grab active:cursor-grabbing px-6 container mx-auto scroll-container touch-auto"
-        >
-          <div className="flex gap-6 pr-6 py-4">
-            {displayReviews.map((review, index) => (
-              <ReviewCard key={`${review.id}-${index}`} review={review} />
-            ))}
+            {/* Text — slides in from RIGHT */}
+            <div className="relative">
+              <p
+                className="invisible leading-[1.9] text-[15px] md:text-[17px] pointer-events-none select-none"
+                style={{ fontFamily: "Georgia, 'Times New Roman', serif" }}
+                aria-hidden="true"
+              >
+                {longestReview.text}
+              </p>
+              <p
+                className="absolute top-0 left-0 right-0 text-brand-grey/80 leading-[1.9] text-[15px] md:text-[17px]"
+                style={{ fontFamily: "Georgia, 'Times New Roman', serif", ...slideStyle(true) }}
+              >
+                {displayedReview.text}
+              </p>
+            </div>
+
+            {/* Author — slides in from LEFT */}
+            <div className="mt-8" style={slideStyle(false)}>
+              <div className="flex gap-0.5 mb-5">
+                {[...Array(5)].map((_, i) => <Star key={i} className="w-3.5 h-3.5 fill-[#FBBF24] text-[#FBBF24]" />)}
+              </div>
+              <div className="flex items-center gap-3">
+                <div className="relative w-10 h-10 rounded-full overflow-hidden bg-white border border-brand-grey/10 flex-shrink-0 flex items-center justify-center">
+                  {displayedReview.avatar ? (
+                    <Image src={displayedReview.avatar} alt={displayedReview.author} fill sizes="40px" className="object-cover object-center" />
+                  ) : (
+                    <span className="font-bold text-brand-grey text-sm">{displayedReview.author[0]}</span>
+                  )}
+                </div>
+                <div>
+                  <p className="font-raleway font-bold text-[11px] text-brand-grey uppercase tracking-[0.3em]">
+                    — {displayedReview.author}
+                  </p>
+                  <p className="text-[9px] text-brand-grey/35 uppercase tracking-widest">{displayedReview.role}</p>
+                </div>
+                <Image src="/reviews/google-icon.svg" width={14} height={14} alt="Google" sizes="14px" className="opacity-40 ml-2" />
+              </div>
+            </div>
           </div>
         </div>
 
-        {/* Editorial Fade Masks (Desktop only) */}
-        <div className="absolute left-0 top-0 bottom-0 w-32 bg-gradient-to-r from-[#F9EFE9] to-transparent z-20 pointer-events-none hidden md:block backdrop-blur-[1px]" />
-        <div className="absolute right-0 top-0 bottom-0 w-32 bg-gradient-to-l from-[#F9EFE9] to-transparent z-20 pointer-events-none hidden md:block backdrop-blur-[1px]" />
+        <AvatarSelector selected={idx} onSelect={go} />
       </div>
 
-      {/* CTA Section */}
-      <div className="mt-16 text-center px-6">
-        <p className="text-brand-grey/40 text-xs uppercase tracking-[0.3em] mb-6 font-semibold">
-          Sei già nostro paziente?
-        </p>
-        <a 
+      {/* CTA */}
+      <div className="mt-20 text-center px-6">
+        <p className="text-brand-grey/40 text-xs uppercase tracking-[0.3em] mb-6 font-semibold">Sei già nostro paziente?</p>
+        <a
           href="https://www.google.com/maps/place/Studio+San+Damiano+-+Odontoiatria+e+Medicina+Estetica/@45.4674664,9.2005203,17z/data=!4m8!3m7!1s0x4786c75768f80025:0x8c71e9e30ec30367!8m2!3d45.4674664!4d9.2005203!9m1!1b1!16s%2Fg%2F11sp4qtywp"
-          target="_blank"
-          rel="noopener noreferrer"
+          target="_blank" rel="noopener noreferrer"
           className="group relative inline-flex items-center gap-3 bg-brand-grey text-white px-10 py-5 rounded-sm overflow-hidden transition-all hover:pr-12"
         >
-          <span className="relative z-10 font-bold uppercase tracking-widest text-xs">
-            Condividi la tua esperienza
-          </span>
+          <span className="relative z-10 font-bold uppercase tracking-widest text-xs">Condividi la tua esperienza</span>
           <MessageSquare className="w-4 h-4 transition-all group-hover:translate-x-1" />
           <div className="absolute inset-0 bg-white/10 translate-y-full group-hover:translate-y-0 transition-transform duration-300" />
         </a>
