@@ -75,10 +75,10 @@ export default function ReviewsSection({ dictionary }: { dictionary: any }) {
   const scrollRef = useRef<HTMLDivElement>(null);
   const [isPaused, setIsPaused] = useState(false);
 
-  // Triple data for seamless manual and auto-scrolling
-  const displayReviews = [...reviewsData, ...reviewsData, ...reviewsData];
+  // Show only once
+  const displayReviews = reviewsData;
 
-  // Auto-scroll logic
+  // Auto-scroll logic (Stops at the end)
   useEffect(() => {
     let animationId: number;
     const scrollContainer = scrollRef.current;
@@ -86,30 +86,25 @@ export default function ReviewsSection({ dictionary }: { dictionary: any }) {
 
     const scroll = () => {
       if (!isPaused && scrollContainer) {
-        scrollContainer.scrollLeft += 0.8; // Speed controlled via JS
-
-        // Seamless loop calculation
-        const maxScroll = (scrollContainer.scrollWidth / 3) * 2;
-        const minScroll = scrollContainer.scrollWidth / 3;
+        const maxScroll = scrollContainer.scrollWidth - scrollContainer.clientWidth;
         
-        if (scrollContainer.scrollLeft >= maxScroll) {
-          scrollContainer.scrollLeft = minScroll;
-        } else if (scrollContainer.scrollLeft <= 5) { // Threshold for reverse jump
-          scrollContainer.scrollLeft = minScroll;
+        if (scrollContainer.scrollLeft < maxScroll - 1) { // 1px buffer
+          scrollContainer.scrollLeft += 0.8; 
+          animationId = requestAnimationFrame(scroll);
         }
+      } else {
+        animationId = requestAnimationFrame(scroll);
       }
-      animationId = requestAnimationFrame(scroll);
     };
 
     animationId = requestAnimationFrame(scroll);
     return () => cancelAnimationFrame(animationId);
   }, [isPaused]);
 
-  // Initial scroll position (start at the middle set of reviews)
+  // Initial scroll position
   useEffect(() => {
     if (scrollRef.current) {
-      const scrollContainer = scrollRef.current;
-      scrollContainer.scrollLeft = scrollContainer.scrollWidth / 3;
+      scrollRef.current.scrollLeft = 0;
     }
   }, []);
 
@@ -149,7 +144,7 @@ export default function ReviewsSection({ dictionary }: { dictionary: any }) {
             </span>
           </div>
           
-          <h2 className="text-5xl md:text-6xl font-raleway font-bold text-brand-grey leading-tight mb-8 tracking-tight">
+          <h2 className="text-4xl md:text-5xl font-raleway font-bold text-brand-grey leading-tight mb-6 tracking-tight">
             La voce dei <span className="text-brand-grey/40">nostri pazienti.</span>
           </h2>
           
@@ -159,7 +154,7 @@ export default function ReviewsSection({ dictionary }: { dictionary: any }) {
         </div>
       </div>
 
-      {/* Infinite Scroll Carousel */}
+      {/* Finite Scroll Carousel */}
       <div 
         className="w-full relative py-12 group/carousel"
         onMouseEnter={() => setIsPaused(true)}
@@ -189,11 +184,7 @@ export default function ReviewsSection({ dictionary }: { dictionary: any }) {
           }
         `}</style>
 
-        {/* Gradient Overlays for smooth edges */}
-        <div className="absolute left-0 top-0 bottom-0 w-32 bg-gradient-to-r from-[#F9EFE9] to-transparent z-20 pointer-events-none" />
-        <div className="absolute right-0 top-0 bottom-0 w-32 bg-gradient-to-l from-[#F9EFE9] to-transparent z-20 pointer-events-none" />
-
-        {/* Navigation Arrows - Desktop Only Visibility */}
+        {/* Navigation Arrows */}
         <button 
           onClick={() => handleArrowScroll("left")}
           className="absolute left-8 top-1/2 -translate-y-1/2 z-30 p-4 bg-white/40 backdrop-blur-md border border-white/50 rounded-full opacity-0 group-hover/carousel:opacity-100 transition-all hover:bg-white hover:scale-110 text-brand-grey shadow-lg hidden md:flex"
