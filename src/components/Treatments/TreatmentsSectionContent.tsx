@@ -83,7 +83,7 @@ export default function TreatmentsSectionContent({ dictionary }: { dictionary: a
   const handleBack = () => viewMode === "DETAIL" ? updateUrl(selectedCategory?.id) : updateUrl();
 
   return (
-    <div className="relative w-full max-w-5xl mx-auto min-h-[500px]">
+    <div className="relative w-full max-w-5xl mx-auto h-auto min-h-[504px]">
       <AnimatePresence mode="wait">
         {viewMode === "GRID" ? (
           <motion.div 
@@ -109,10 +109,10 @@ export default function TreatmentsSectionContent({ dictionary }: { dictionary: a
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
             transition={{ duration: 0.5, ease: "circOut" }}
-            className="w-full min-h-[500px] h-full bg-brand-grey shadow-2xl rounded-sm flex flex-col relative overflow-hidden"
+            className="w-full h-[504px] bg-brand-grey shadow-2xl rounded-sm flex flex-col relative overflow-hidden border border-white/5"
           >
-            {/* Header */}
-            <div className="flex items-center justify-between p-6 z-30">
+            {/* Header - Fixed to top */}
+            <div className="flex items-center justify-between p-6 z-30 bg-brand-grey/95 backdrop-blur-sm">
               <div>
                 {viewMode === "DETAIL" && (
                   <button 
@@ -132,8 +132,8 @@ export default function TreatmentsSectionContent({ dictionary }: { dictionary: a
               </button>
             </div>
 
-            {/* View Content */}
-            <div className="flex-1 relative overflow-y-auto custom-scrollbar px-8 pb-12">
+            {/* View Content - Scrollable area */}
+            <div className="flex-1 relative overflow-y-auto scrollbar-hide md:scrollbar-thin md:scrollbar-thumb-white/10 md:scrollbar-track-transparent px-8 pb-12">
               <AnimatePresence mode="wait">
                 {viewMode === "LIST" && selectedCategory && (
                   <motion.div
