@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import Image from "next/image";
 import { useSearchParams, useRouter, usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
-import { X, ArrowLeft, ChevronRight } from "lucide-react";
+import { X, ArrowLeft, ChevronRight, ChevronDown } from "lucide-react";
 import { treatmentsData, CategoryData, Treatment } from "@/data/treatmentsData";
 
 const categories = [
@@ -86,8 +86,8 @@ export default function TreatmentsSectionContent({ dictionary }: { dictionary: a
     <div className="relative w-full max-w-5xl mx-auto flex flex-col items-center">
       {/* Titolo Sezione - Sempre Visibile */}
       <div className="text-center mb-8 px-4">
-        <h2 className="text-xl md:text-2xl font-raleway font-semibold text-brand-grey leading-relaxed whitespace-nowrap">
-          Studio San Damiano: un luogo dove salute ed estetica<br />
+        <h2 className="text-xl md:text-2xl font-raleway font-semibold text-brand-grey leading-relaxed">
+          Studio San Damiano: un luogo dove salute ed estetica<br className="hidden md:block" />
           si fondono per esaltare la bellezza distintiva di ogni persona.
         </h2>
       </div>
@@ -139,25 +139,25 @@ export default function TreatmentsSectionContent({ dictionary }: { dictionary: a
             >
               {/* Header */}
               <div className="flex items-center justify-between p-4 md:p-6 bg-[#F6E4D8] border-b border-brand-grey/5 flex-shrink-0">
-                <div className="flex-1">
+                <div className="w-10 md:flex-1">
                   {viewMode === "DETAIL" && (
                     <button
                       onClick={handleBack}
                       className="group flex items-center text-brand-grey/50 hover:text-brand-grey transition-colors text-xs uppercase tracking-premium"
                     >
-                      <ArrowLeft className="w-4 h-4 mr-2 group-hover:-translate-x-1 transition-transform" />
-                      Indietro
+                      <ArrowLeft className="w-6 h-6 md:w-4 md:h-4 md:mr-2 group-hover:-translate-x-1 transition-transform" />
+                      <span className="hidden md:inline">Indietro</span>
                     </button>
                   )}
                 </div>
 
-                <div className="flex-1 text-center">
-                  <h2 className="text-base md:text-lg font-raleway font-semibold text-brand-grey uppercase tracking-[0.25em]">
+                <div className="flex-1 px-2 text-center overflow-hidden">
+                  <h2 className="text-lg md:text-lg font-raleway font-semibold text-brand-grey uppercase tracking-[0.1em] md:tracking-[0.25em] whitespace-nowrap overflow-hidden text-ellipsis">
                     {viewMode === "DETAIL" ? selectedTreatment?.title : selectedCategory?.title}
                   </h2>
                 </div>
 
-                <div className="flex-1 flex justify-end">
+                <div className="w-10 md:flex-1 flex justify-end">
                   <button
                     onClick={handleClose}
                     className="p-2 hover:bg-brand-grey/5 rounded-full transition-colors"
@@ -241,6 +241,7 @@ function CategoryCard({ category, onClick }: { category: any; onClick: () => voi
 
 function ListView({ category, onSelect }: { category: CategoryData; onSelect: (t: Treatment) => void }) {
   const [activeTag, setActiveTag] = useState<string | null>(null);
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
   const inestetismi = [
     { id: "acne-e-cicatrici", label: "Acne e cicatrici" },
@@ -254,6 +255,8 @@ function ListView({ category, onSelect }: { category: CategoryData; onSelect: (t
     { id: "cellulite", label: "Cellulite" },
   ];
 
+  const activeLabel = inestetismi.find(i => i.id === activeTag)?.label || "Tutti i trattamenti";
+
   const filteredTreatments = activeTag 
     ? category.treatments.filter(t => t.tags?.includes(activeTag))
     : category.treatments;
@@ -263,39 +266,75 @@ function ListView({ category, onSelect }: { category: CategoryData; onSelect: (t
   return (
     <div className="h-full flex flex-col">
       {isAesthetic && (
-        <div className="px-8 pt-6 pb-2 border-b border-white/5 bg-white/[0.02]">
-          <p className="text-xs md:text-sm uppercase tracking-[0.2em] text-brand-cream/60 mb-5 font-semibold">
+        <div className="px-6 md:px-8 pt-8 md:pt-6 pb-4 md:pb-2 border-b border-white/5 bg-white/[0.02] relative z-[110]">
+          <p className="text-lg md:text-sm uppercase tracking-[0.2em] text-brand-cream/60 mb-4 md:mb-5 font-semibold">
             Cosa desideri trattare?
           </p>
-          <div className="flex flex-wrap gap-2 mb-4">
+          
+          {/* Dropdown / Popover Trigger */}
+          <div className="relative">
             <button
-              onClick={() => setActiveTag(null)}
-              className={`px-4 py-2 rounded-sm text-xs uppercase tracking-wider transition-all border ${
-                activeTag === null 
-                  ? "bg-brand-cream text-brand-grey border-brand-cream shadow-lg" 
-                  : "bg-transparent text-white/60 border-white/10 hover:border-white/30"
-              }`}
+              onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+              className="w-full md:w-auto md:min-w-[280px] flex items-center justify-between px-5 py-4 md:py-3 bg-brand-grey border border-white/10 rounded-sm text-left transition-all hover:bg-white/5 group h-14 md:h-auto"
             >
-              Mostra tutti
+              <span className="text-lg md:text-xs uppercase tracking-widest text-white/90 group-hover:text-white">
+                {activeLabel}
+              </span>
+              <ChevronDown className={`w-5 h-5 text-brand-cream transition-transform duration-300 ${isDropdownOpen ? "rotate-180" : ""}`} />
             </button>
-            {inestetismi.map((tag) => (
-              <button
-                key={tag.id}
-                onClick={() => setActiveTag(tag.id)}
-                className={`px-4 py-2 rounded-sm text-xs uppercase tracking-wider transition-all border ${
-                  activeTag === tag.id 
-                    ? "bg-brand-cream text-brand-grey border-brand-cream shadow-lg" 
-                    : "bg-transparent text-white/60 border-white/10 hover:border-white/30"
-                }`}
-              >
-                {tag.label}
-              </button>
-            ))}
+
+            {/* Popover Menu */}
+            <AnimatePresence>
+              {isDropdownOpen && (
+                <>
+                  {/* Backdrop per chiudere cliccando fuori */}
+                  <div 
+                    className="fixed inset-0 z-10" 
+                    onClick={() => setIsDropdownOpen(false)} 
+                  />
+                  <motion.div
+                    initial={{ opacity: 0, y: 10, scale: 0.98 }}
+                    animate={{ opacity: 1, y: 0, scale: 1 }}
+                    exit={{ opacity: 0, y: 10, scale: 0.98 }}
+                    transition={{ duration: 0.2, ease: "easeOut" }}
+                    className="absolute top-full left-0 right-0 mt-2 bg-brand-grey border border-white/10 shadow-2xl rounded-sm overflow-hidden z-20 md:w-[320px]"
+                  >
+                    <div className="flex flex-col py-2 max-h-[300px] overflow-y-auto scrollbar-hide relative group/list">
+                      <button
+                        onClick={() => { setActiveTag(null); setIsDropdownOpen(false); }}
+                        className={`px-6 py-4 md:py-3 text-left transition-all hover:bg-white/5 border-b border-white/5 ${activeTag === null ? "text-brand-cream bg-white/5" : "text-white/60"}`}
+                      >
+                        <span className="text-base md:text-xs uppercase tracking-widest font-medium">Mostra tutti</span>
+                      </button>
+                      {inestetismi.map((tag) => (
+                        <button
+                          key={tag.id}
+                          onClick={() => { setActiveTag(tag.id); setIsDropdownOpen(false); }}
+                          className={`px-6 py-4 md:py-3 text-left transition-all hover:bg-white/5 border-b border-white/5 last:border-0 ${activeTag === tag.id ? "text-brand-cream bg-white/5" : "text-white/60"}`}
+                        >
+                          <span className="text-base md:text-xs uppercase tracking-widest font-medium">{tag.label}</span>
+                        </button>
+                      ))}
+                    </div>
+                    
+                    {/* Indicatore Scroll (Freccia in basso) */}
+                    <div className="absolute bottom-0 left-0 right-0 h-8 bg-gradient-to-t from-brand-grey to-transparent pointer-events-none flex items-center justify-center">
+                      <motion.div
+                        animate={{ y: [0, 4, 0] }}
+                        transition={{ duration: 2, repeat: Infinity }}
+                      >
+                        <ChevronDown className="w-4 h-4 text-brand-cream/40" />
+                      </motion.div>
+                    </div>
+                  </motion.div>
+                </>
+              )}
+            </AnimatePresence>
           </div>
         </div>
       )}
 
-      <div className="flex-1 overflow-y-auto scrollbar-hide md:scrollbar-thin md:scrollbar-thumb-white/10 md:scrollbar-track-transparent px-8 py-7">
+      <div className="flex-1 overflow-y-auto scrollbar-hide md:scrollbar-thin md:scrollbar-thumb-white/10 md:scrollbar-track-transparent px-6 md:px-8 py-8 md:py-7">
         <AnimatePresence mode="wait">
           <motion.div 
             key={activeTag || "all"}
@@ -303,35 +342,35 @@ function ListView({ category, onSelect }: { category: CategoryData; onSelect: (t
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.3, ease: "easeInOut" }}
-            className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-1"
+            className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-2 md:gap-y-1"
           >
             {filteredTreatments.map((treatment) => (
               <div 
                 key={treatment.id}
                 onClick={() => onSelect(treatment)}
-                className="group flex items-center justify-between py-2 border-b border-white/10 hover:border-brand-cream/30 cursor-pointer transition-all"
+                className="group flex items-center justify-between py-4 md:py-2 border-b border-white/10 hover:border-brand-cream/30 cursor-pointer transition-all"
               >
-                <div className="flex items-center gap-4">
+                <div className="flex items-center gap-5 md:gap-4">
                   {treatment.image && (
-                    <div className="relative w-10 h-10 rounded-sm overflow-hidden flex-shrink-0 border border-white/5">
+                    <div className="relative w-12 h-12 md:w-10 md:h-10 rounded-sm overflow-hidden flex-shrink-0 border border-white/5">
                       <Image 
                         src={treatment.image} 
                         alt={treatment.title} 
                         fill 
-                        sizes="40px"
+                        sizes="48px"
                         className="object-cover" 
                       />
                     </div>
                   )}
-                  <span className="text-xl font-raleway text-white/90 group-hover:text-white group-hover:translate-x-1 transition-all">
+                  <span className="text-2xl md:text-xl font-raleway text-white/90 group-hover:text-white group-hover:translate-x-1 transition-all">
                     {treatment.title}
                   </span>
                 </div>
-                <ChevronRight className="w-5 h-5 text-brand-cream opacity-40 group-hover:opacity-100 group-hover:translate-x-1 transition-all" />
+                <ChevronRight className="w-6 h-6 md:w-5 md:h-5 text-brand-cream opacity-40 group-hover:opacity-100 group-hover:translate-x-1 transition-all" />
               </div>
             ))}
             {filteredTreatments.length === 0 && (
-              <p className="text-white/40 text-sm italic py-4 col-span-2">Nessun trattamento trovato per questa selezione.</p>
+              <p className="text-white/40 text-lg md:text-sm italic py-4 col-span-2">Nessun trattamento trovato per questa selezione.</p>
             )}
           </motion.div>
         </AnimatePresence>
@@ -353,7 +392,7 @@ function DetailView({ treatment, categoryId }: { treatment: Treatment; categoryI
       <div className="w-full md:w-3/5 h-1/2 md:h-full relative flex flex-col">
         <div className="flex-1 overflow-y-auto scrollbar-hide md:scrollbar-thin md:scrollbar-thumb-white/10 md:scrollbar-track-transparent px-6 md:px-8 pt-6 md:pt-10 pb-24">
           <div className="prose prose-invert max-w-none">
-            <p className="text-sm md:text-lg text-white/80 leading-relaxed font-light whitespace-pre-line">
+            <p className="text-lg md:text-lg text-white/80 leading-relaxed font-light whitespace-pre-line">
               {treatment.fullDescription}
             </p>
           </div>
@@ -361,7 +400,7 @@ function DetailView({ treatment, categoryId }: { treatment: Treatment; categoryI
 
         {/* Bottone Sticky in basso a sinistra della colonna testo */}
         <div className="absolute bottom-0 left-0 w-full p-6 md:p-8 z-40 bg-gradient-to-t from-brand-grey via-brand-grey/90 to-transparent">
-           <button className="w-full md:w-auto bg-brand-cream text-brand-grey px-8 py-3 uppercase tracking-widest text-[10px] font-bold hover:bg-white transition-all shadow-xl hover:-translate-y-1">
+           <button className="w-full md:w-auto bg-brand-cream text-brand-grey px-8 py-4 md:py-3 uppercase tracking-widest text-xs md:text-[10px] font-bold hover:bg-white transition-all shadow-xl hover:-translate-y-1 h-14 md:h-auto">
             Prenota Consultazione
           </button>
         </div>
@@ -393,7 +432,7 @@ function EaglegridDetailView({ treatment }: { treatment: Treatment }) {
         {/* Sinistra - Scrollable */}
         <div className="w-full md:w-3/5 h-1/2 md:h-full relative flex flex-col">
           <div className="flex-1 overflow-y-auto scrollbar-hide md:scrollbar-thin md:scrollbar-thumb-white/10 md:scrollbar-track-transparent px-6 md:px-8 py-6 md:py-10 pb-32">
-            <p className="whitespace-pre-line leading-relaxed text-base md:text-lg text-white/80 font-light mb-12">
+            <p className="whitespace-pre-line leading-relaxed text-lg md:text-lg text-white/80 font-light mb-12">
               {treatment.fullDescription}
             </p>
             
@@ -429,7 +468,7 @@ function EaglegridDetailView({ treatment }: { treatment: Treatment }) {
           </div>
 
           <div className="absolute bottom-0 left-0 w-full p-6 md:p-8 z-40 bg-gradient-to-t from-brand-grey via-brand-grey/90 to-transparent">
-            <button className="w-full md:w-auto bg-brand-cream text-brand-grey px-8 py-3 uppercase tracking-widest text-[10px] font-bold hover:bg-white transition-all shadow-xl hover:-translate-y-1">
+            <button className="w-full md:w-auto bg-brand-cream text-brand-grey px-8 py-4 md:py-3 uppercase tracking-widest text-xs md:text-[10px] font-bold hover:bg-white transition-all shadow-xl hover:-translate-y-1 h-14 md:h-auto">
               Prenota Consultazione
             </button>
           </div>
