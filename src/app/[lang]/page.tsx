@@ -14,7 +14,7 @@ export default async function Home({
   return (
     <div className="flex flex-col min-h-screen">
       {/* Hero Section */}
-      <section className="bg-brand-cream min-h-[85vh] flex flex-col items-center justify-center relative overflow-hidden">
+      <section className="bg-[#F6E4D8] min-h-[85vh] flex flex-col items-center justify-center relative overflow-hidden">
         <div className="container mx-auto px-8 md:px-[32px] flex flex-col items-center text-center z-10">
           <h1 className="text-4xl md:text-6xl font-light mb-8 tracking-tight text-brand-grey leading-tight max-w-4xl">
             {/* Template text for now */}

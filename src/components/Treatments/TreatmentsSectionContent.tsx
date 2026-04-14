@@ -112,28 +112,37 @@ export default function TreatmentsSectionContent({ dictionary }: { dictionary: a
             className="w-full h-[504px] bg-brand-grey shadow-2xl rounded-sm flex flex-col relative overflow-hidden border border-white/5"
           >
             {/* Header - Fixed to top */}
-            <div className="flex items-center justify-between p-6 z-30 bg-brand-grey/95 backdrop-blur-sm">
-              <div>
+            <div className="flex items-center justify-between p-6 z-30 bg-[#F6E4D8] border-b border-brand-grey/5">
+              <div className="flex-1">
                 {viewMode === "DETAIL" && (
                   <button 
                     onClick={handleBack}
-                    className="group flex items-center text-white/60 hover:text-white transition-colors text-xs uppercase tracking-premium"
+                    className="group flex items-center text-brand-grey/50 hover:text-brand-grey transition-colors text-xs uppercase tracking-premium"
                   >
                     <ArrowLeft className="w-4 h-4 mr-2 group-hover:-translate-x-1 transition-transform" />
                     Indietro
                   </button>
                 )}
               </div>
-              <button 
-                onClick={handleClose}
-                className="p-2 hover:bg-white/10 rounded-full transition-colors"
-              >
-                <X className="w-6 h-6 text-white" />
-              </button>
+              
+              <div className="flex-1 text-center">
+                <h2 className="text-base md:text-lg font-raleway font-semibold text-brand-grey uppercase tracking-[0.25em]">
+                  {selectedCategory?.title}
+                </h2>
+              </div>
+
+              <div className="flex-1 flex justify-end">
+                <button 
+                  onClick={handleClose}
+                  className="p-2 hover:bg-brand-grey/5 rounded-full transition-colors"
+                >
+                  <X className="w-6 h-6 text-brand-grey" />
+                </button>
+              </div>
             </div>
 
             {/* View Content - Scrollable area */}
-            <div className="flex-1 relative overflow-y-auto scrollbar-hide md:scrollbar-thin md:scrollbar-thumb-white/10 md:scrollbar-track-transparent px-8 pb-12">
+            <div className="flex-1 relative overflow-y-auto scrollbar-hide md:scrollbar-thin md:scrollbar-thumb-white/10 md:scrollbar-track-transparent px-8 py-10">
               <AnimatePresence mode="wait">
                 {viewMode === "LIST" && selectedCategory && (
                   <motion.div
@@ -194,20 +203,17 @@ function CategoryCard({ category, onClick }: { category: any; onClick: () => voi
 function ListView({ category, onSelect }: { category: CategoryData; onSelect: (t: Treatment) => void }) {
   return (
     <div>
-      <h2 className="text-3xl font-raleway font-light text-white mb-10 uppercase tracking-wide border-l-4 border-brand-cream/50 pl-6">
-        {category.title}
-      </h2>
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-2">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-1">
         {category.treatments.map((treatment) => (
           <div 
             key={treatment.id}
             onClick={() => onSelect(treatment)}
-            className="group flex items-center justify-between py-4 border-b border-white/10 hover:border-brand-cream/30 cursor-pointer transition-all"
+            className="group flex items-center justify-between py-2 border-b border-white/10 hover:border-brand-cream/30 cursor-pointer transition-all"
           >
             <span className="text-lg font-raleway text-white/90 group-hover:text-white group-hover:translate-x-2 transition-all">
               {treatment.title}
             </span>
-            <ChevronRight className="w-5 h-5 text-brand-cream opacity-0 group-hover:opacity-100 transition-all" />
+            <ChevronRight className="w-5 h-5 text-brand-cream opacity-40 group-hover:opacity-100 group-hover:translate-x-1 transition-all" />
           </div>
         ))}
       </div>
