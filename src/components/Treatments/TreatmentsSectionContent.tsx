@@ -95,7 +95,7 @@ export default function TreatmentsSectionContent({ dictionary }: { dictionary: a
   const handleBack = () => viewMode === "DETAIL" ? updateUrl(selectedCategory?.id) : updateUrl();
 
   return (
-    <div className="relative w-full max-w-5xl mx-auto flex flex-col items-center">
+    <div className="relative w-full max-w-5xl mx-auto flex flex-col items-center px-[5%] md:px-0">
       {/* Titolo Sezione - Sempre Visibile */}
       <div className="text-center mb-8 px-4">
         <h2 className="text-xl md:text-2xl font-raleway font-semibold text-brand-grey leading-relaxed">

@@ -20,7 +20,7 @@ export default async function Home({
 
       {/* Services Section Container */}
       <section className="bg-white" id="trattamenti-wrapper">
-        <div className="container mx-auto px-8 md:px-[32px]">
+        <div className="container mx-auto px-0 md:px-[32px]">
            <TreatmentsSection dictionary={dictionary} />
         </div>
       </section>
