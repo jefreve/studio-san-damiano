@@ -45,13 +45,13 @@ export default function Navbar({ lang, dictionary }: NavbarProps) {
 
   return (
     <nav
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 flex items-center ${
         isScrolled
-          ? "bg-white/95 backdrop-blur-md py-3 shadow-sm border-b border-brand-grey/5"
-          : "bg-white py-6"
+          ? "bg-white/90 backdrop-blur-md h-[80px] shadow-sm border-b border-brand-grey/5"
+          : "bg-white h-[103px]"
       }`}
     >
-      <div className="max-w-[1440px] mx-auto px-8 md:px-[32px] flex items-center justify-between">
+      <div className="w-full max-w-[1440px] mx-auto px-8 md:px-[32px] flex items-center justify-between">
         {/* Logo */}
         <Link href={`/${lang}`} className="relative h-10 w-44 md:h-12 md:w-52 flex-shrink-0">
           <Image
@@ -70,7 +70,7 @@ export default function Navbar({ lang, dictionary }: NavbarProps) {
             <Link
               key={item.href}
               href={item.href}
-              className="text-[11px] font-normal uppercase tracking-premium text-brand-grey hover:opacity-70 transition-opacity"
+              className="text-[14px] font-bold font-open-sans uppercase tracking-premium text-brand-grey hover:opacity-70 transition-opacity"
             >
               {item.title}
             </Link>
@@ -103,7 +103,7 @@ export default function Navbar({ lang, dictionary }: NavbarProps) {
             <Link
               key={item.href}
               href={item.href}
-              className="text-lg font-light uppercase tracking-premium text-brand-grey"
+              className="text-lg font-bold font-open-sans uppercase tracking-premium text-brand-grey"
               onClick={() => setMobileMenuOpen(false)}
             >
               {item.title}

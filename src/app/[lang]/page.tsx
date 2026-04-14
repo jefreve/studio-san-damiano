@@ -1,6 +1,6 @@
 import { getDictionary } from "@/lib/get-dictionary";
-import Image from "next/image";
 
+import HeroContent from "@/components/Hero/HeroContent";
 import TreatmentsSection from "@/components/Treatments/TreatmentsSection";
 
 export default async function Home({
@@ -15,32 +15,7 @@ export default async function Home({
     <div className="flex flex-col min-h-screen">
       {/* Hero Section */}
       <section className="bg-[#F6E4D8] py-12 flex flex-col items-center overflow-hidden">
-        <div className="flex flex-col md:flex-row w-full max-w-[1386px] mx-auto">
-          
-          {/* BLOCCO SINISTRO: 693x420 + 10px padding */}
-          <div className="w-full md:w-[693px] h-[420px] p-[10px] flex items-center justify-center relative">
-            <div className="relative w-full h-full">
-              <Image 
-                src="/san-damiano-assets/statua-home.webp" 
-                alt="La bellezza come opera d'arte" 
-                fill 
-                sizes="693px"
-                className="object-contain"
-                priority
-              />
-            </div>
-          </div>
-
-          {/* BLOCCO DESTRO: 693x420 + 10px padding */}
-          <div className="w-full md:w-[693px] h-[420px] p-[10px] flex items-center justify-start">
-            <div className="w-full h-full flex flex-col justify-center pl-6 md:pl-16">
-              <h1 className="text-4xl md:text-[58px] font-raleway font-bold text-[#5A5A5A] leading-[1.1] tracking-tight">
-                La bellezza, come<br />
-                un'opera d'arte.
-              </h1>
-            </div>
-          </div>
-        </div>
+        <HeroContent />
       </section>
 
       {/* Services Section Container */}
