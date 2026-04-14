@@ -1,6 +1,8 @@
 import { getDictionary } from "@/lib/get-dictionary";
 import Image from "next/image";
 
+import TreatmentsSection from "@/components/Treatments/TreatmentsSection";
+
 export default async function Home({
   params,
 }: {
@@ -26,10 +28,10 @@ export default async function Home({
         </div>
       </section>
 
-      {/* Services Section Container - Initial placeholder */}
+      {/* Services Section Container */}
       <section className="bg-white py-24">
         <div className="container mx-auto px-8 md:px-[32px]">
-           {/* Grid will go here */}
+           <TreatmentsSection dictionary={dictionary} />
         </div>
       </section>
     </div>
