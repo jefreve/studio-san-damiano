@@ -92,15 +92,24 @@ export default function TreatmentsSectionContent({ dictionary }: { dictionary: a
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 1.02 }}
             transition={{ duration: 0.5, ease: [0.4, 0, 0.2, 1] }}
-            className="grid grid-cols-1 md:grid-cols-2 gap-8 w-full"
+            className="w-full flex flex-col items-center"
           >
-            {categories.map((category) => (
-              <CategoryCard 
-                key={category.id} 
-                category={category} 
-                onClick={() => updateUrl(category.id)}
-              />
-            ))}
+            <div className="text-center mb-16 max-w-2xl px-4">
+              <h2 className="text-xl md:text-2xl font-raleway font-light text-brand-grey leading-relaxed">
+                Studio San Damiano: un luogo dove salute ed estetica<br />
+                si fondono per esaltare la bellezza distintiva di ogni persona.
+              </h2>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 w-full">
+              {categories.map((category) => (
+                <CategoryCard 
+                  key={category.id} 
+                  category={category} 
+                  onClick={() => updateUrl(category.id)}
+                />
+              ))}
+            </div>
           </motion.div>
         ) : (
           <motion.div 
