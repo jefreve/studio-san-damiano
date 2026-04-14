@@ -92,12 +92,13 @@ export default function TreatmentsSectionContent({ dictionary }: { dictionary: a
         </h2>
       </div>
 
-      {/*
-        Wrapper a altezza fissa: 2 righe × 260px + 1 gap × 24px = 544px.
-        La grande scheda è position:absolute inset-0 → non cambia l'altezza del wrapper.
+      {/* 
+        Wrapper Responsivo:
+        Mobile: 4 card da 260px + 3 gap da 24px = 1112px
+        Desktop: 2 righe da 260px + 1 gap da 24px = 544px
       */}
-      <div className="w-full relative" style={{ height: "544px" }}>
-        {/* Griglia — sempre nel DOM, nascosta (opacity 0, non interagibile) quando scheda aperta */}
+      <div className="w-full relative h-[1112px] md:h-[544px]">
+        {/* Griglia — sempre nel DOM, nascosta quando scheda aperta */}
         <motion.div
           animate={{
             opacity: viewMode === "GRID" ? 1 : 0,
@@ -114,20 +115,30 @@ export default function TreatmentsSectionContent({ dictionary }: { dictionary: a
             />
           ))}
         </motion.div>
+      </div>
 
-        {/* Scheda grande — absolute overlay, stessa altezza del wrapper */}
-        <AnimatePresence>
-          {viewMode !== "GRID" && (
+      {/* Scheda grande — Overlay Modale */}
+      <AnimatePresence>
+        {viewMode !== "GRID" && (
+          <motion.div
+            key="modal-overlay"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-[100] bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 md:p-10"
+            onClick={handleClose}
+          >
             <motion.div
               key="large-card"
-              initial={{ opacity: 0, scale: 0.97 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.97 }}
-              transition={{ duration: 0.35, ease: "circOut" }}
-              className="absolute inset-0 bg-brand-grey shadow-2xl rounded-sm flex flex-col overflow-hidden border border-white/5 z-10"
+              initial={{ opacity: 0, scale: 0.95, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.95, y: 20 }}
+              transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
+              onClick={(e) => e.stopPropagation()}
+              className="w-[90%] h-[90%] bg-brand-grey shadow-2xl md:rounded-sm flex flex-col overflow-hidden border border-white/5"
             >
               {/* Header */}
-              <div className="flex items-center justify-between p-6 bg-[#F6E4D8] border-b border-brand-grey/5 flex-shrink-0">
+              <div className="flex items-center justify-between p-4 md:p-6 bg-[#F6E4D8] border-b border-brand-grey/5 flex-shrink-0">
                 <div className="flex-1">
                   {viewMode === "DETAIL" && (
                     <button
@@ -186,9 +197,9 @@ export default function TreatmentsSectionContent({ dictionary }: { dictionary: a
                 </AnimatePresence>
               </div>
             </motion.div>
-          )}
-        </AnimatePresence>
-      </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }
@@ -253,15 +264,15 @@ function ListView({ category, onSelect }: { category: CategoryData; onSelect: (t
     <div className="h-full flex flex-col">
       {isAesthetic && (
         <div className="px-8 pt-6 pb-2 border-b border-white/5 bg-white/[0.02]">
-          <p className="text-[10px] uppercase tracking-[0.2em] text-white/40 mb-4 font-bold">
+          <p className="text-xs md:text-sm uppercase tracking-[0.2em] text-brand-cream/60 mb-5 font-semibold">
             Cosa desideri trattare?
           </p>
           <div className="flex flex-wrap gap-2 mb-4">
             <button
               onClick={() => setActiveTag(null)}
-              className={`px-3 py-1.5 rounded-sm text-[10px] uppercase tracking-wider transition-all border ${
+              className={`px-4 py-2 rounded-sm text-xs uppercase tracking-wider transition-all border ${
                 activeTag === null 
-                  ? "bg-brand-cream text-brand-grey border-brand-cream" 
+                  ? "bg-brand-cream text-brand-grey border-brand-cream shadow-lg" 
                   : "bg-transparent text-white/60 border-white/10 hover:border-white/30"
               }`}
             >
@@ -271,9 +282,9 @@ function ListView({ category, onSelect }: { category: CategoryData; onSelect: (t
               <button
                 key={tag.id}
                 onClick={() => setActiveTag(tag.id)}
-                className={`px-3 py-1.5 rounded-sm text-[10px] uppercase tracking-wider transition-all border ${
+                className={`px-4 py-2 rounded-sm text-xs uppercase tracking-wider transition-all border ${
                   activeTag === tag.id 
-                    ? "bg-brand-cream text-brand-grey border-brand-cream" 
+                    ? "bg-brand-cream text-brand-grey border-brand-cream shadow-lg" 
                     : "bg-transparent text-white/60 border-white/10 hover:border-white/30"
                 }`}
               >
@@ -337,34 +348,34 @@ function DetailView({ treatment, categoryId }: { treatment: Treatment; categoryI
   }
 
   return (
-    <div className="flex flex-row h-full">
+    <div className="flex flex-col md:flex-row h-full">
       {/* Colonna Sinistra - Testo Scrollable */}
-      <div className="w-3/5 h-full relative flex flex-col">
-        <div className="flex-1 overflow-y-auto scrollbar-hide md:scrollbar-thin md:scrollbar-thumb-white/10 md:scrollbar-track-transparent px-8 pt-10 pb-24">
+      <div className="w-full md:w-3/5 h-1/2 md:h-full relative flex flex-col">
+        <div className="flex-1 overflow-y-auto scrollbar-hide md:scrollbar-thin md:scrollbar-thumb-white/10 md:scrollbar-track-transparent px-6 md:px-8 pt-6 md:pt-10 pb-24">
           <div className="prose prose-invert max-w-none">
-            <p className="text-base md:text-lg text-white/80 leading-relaxed font-light whitespace-pre-line">
+            <p className="text-sm md:text-lg text-white/80 leading-relaxed font-light whitespace-pre-line">
               {treatment.fullDescription}
             </p>
           </div>
         </div>
 
         {/* Bottone Sticky in basso a sinistra della colonna testo */}
-        <div className="absolute bottom-0 left-0 w-full p-8 z-40 bg-gradient-to-t from-brand-grey via-brand-grey/90 to-transparent">
-           <button className="bg-brand-cream text-brand-grey px-8 py-3 uppercase tracking-widest text-[10px] font-bold hover:bg-white transition-all shadow-xl hover:-translate-y-1">
+        <div className="absolute bottom-0 left-0 w-full p-6 md:p-8 z-40 bg-gradient-to-t from-brand-grey via-brand-grey/90 to-transparent">
+           <button className="w-full md:w-auto bg-brand-cream text-brand-grey px-8 py-3 uppercase tracking-widest text-[10px] font-bold hover:bg-white transition-all shadow-xl hover:-translate-y-1">
             Prenota Consultazione
           </button>
         </div>
       </div>
 
       {/* Colonna Destra - Immagine Statica a tutta altezza senza bordi */}
-      <div className="w-full md:w-2/5 h-full relative">
-        <div className="relative w-full h-full">
+      <div className="w-full md:w-2/5 h-1/2 md:h-full relative bg-black/20">
+        <div className="relative w-full h-full p-8 md:p-0">
           {treatment.image && (
             <Image 
               src={treatment.image} 
               alt={treatment.title} 
               fill 
-              sizes="400px"
+              sizes="(max-width: 768px) 100vw, 400px"
               className="object-contain object-center"
             />
           )}
@@ -378,27 +389,27 @@ function EaglegridDetailView({ treatment }: { treatment: Treatment }) {
   return (
     <div className="h-full flex flex-col">
       {/* Content Split */}
-      <div className="flex-1 flex flex-row overflow-hidden">
+      <div className="flex-1 flex flex-col md:flex-row overflow-hidden">
         {/* Sinistra - Scrollable */}
-        <div className="w-3/5 h-full relative flex flex-col">
-          <div className="flex-1 overflow-y-auto scrollbar-hide md:scrollbar-thin md:scrollbar-thumb-white/10 md:scrollbar-track-transparent px-8 py-10 pb-32">
-            <p className="whitespace-pre-line leading-relaxed text-lg text-white/80 font-light mb-12">
+        <div className="w-full md:w-3/5 h-1/2 md:h-full relative flex flex-col">
+          <div className="flex-1 overflow-y-auto scrollbar-hide md:scrollbar-thin md:scrollbar-thumb-white/10 md:scrollbar-track-transparent px-6 md:px-8 py-6 md:py-10 pb-32">
+            <p className="whitespace-pre-line leading-relaxed text-base md:text-lg text-white/80 font-light mb-12">
               {treatment.fullDescription}
             </p>
             
-            <div className="bg-white/5 p-8 border border-white/10 rounded-sm mb-12">
+            <div className="bg-white/5 p-6 md:p-8 border border-white/10 rounded-sm mb-12">
               <p className="font-semibold mb-4 uppercase tracking-premium text-brand-cream text-[10px]">Contatti e Appuntamenti</p>
               {treatment.contactInfo && (
                 <div className="space-y-2">
-                  <p className="text-2xl text-white font-raleway">TEL. {treatment.contactInfo.phone}</p>
-                  <p className="text-lg text-white/80 underline decoration-brand-cream">{treatment.contactInfo.email}</p>
+                  <p className="text-xl md:text-2xl text-white font-raleway">TEL. {treatment.contactInfo.phone}</p>
+                  <p className="text-base md:text-lg text-white/80 underline decoration-brand-cream">{treatment.contactInfo.email}</p>
                 </div>
               )}
             </div>
 
             {treatment.faqs && (
               <div className="pt-12 border-t border-white/10">
-                <h3 className="text-xl font-raleway font-light text-brand-cream mb-8 uppercase tracking-widest">
+                <h3 className="text-lg md:text-xl font-raleway font-light text-brand-cream mb-8 uppercase tracking-widest">
                   Domande Frequenti
                 </h3>
                 <div className="space-y-6">
@@ -417,22 +428,22 @@ function EaglegridDetailView({ treatment }: { treatment: Treatment }) {
             )}
           </div>
 
-          <div className="absolute bottom-0 left-0 w-full p-8 z-40 bg-gradient-to-t from-brand-grey via-brand-grey/90 to-transparent">
-            <button className="bg-brand-cream text-brand-grey px-8 py-3 uppercase tracking-widest text-[10px] font-bold hover:bg-white transition-all shadow-xl hover:-translate-y-1">
+          <div className="absolute bottom-0 left-0 w-full p-6 md:p-8 z-40 bg-gradient-to-t from-brand-grey via-brand-grey/90 to-transparent">
+            <button className="w-full md:w-auto bg-brand-cream text-brand-grey px-8 py-3 uppercase tracking-widest text-[10px] font-bold hover:bg-white transition-all shadow-xl hover:-translate-y-1">
               Prenota Consultazione
             </button>
           </div>
         </div>
 
         {/* Destra - Statica */}
-        <div className="w-2/5 h-full relative">
-           <div className="relative w-full h-full">
+        <div className="w-full md:w-2/5 h-1/2 md:h-full relative bg-black/20">
+           <div className="relative w-full h-full p-8 md:p-0">
             {treatment.image && (
                 <Image 
                   src={treatment.image} 
                   alt="Eaglegrid Technology" 
                   fill 
-                  sizes="400px"
+                  sizes="(max-width: 768px) 100vw, 400px"
                   className="object-contain object-center" 
                 />
               )}
