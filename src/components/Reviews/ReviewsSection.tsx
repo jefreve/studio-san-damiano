@@ -239,17 +239,17 @@ export default function ReviewsSection({ dictionary }: { dictionary: any }) {
         {/* Navigation Arrows */}
         <button 
           onClick={() => handleArrowScroll("left")}
-          className={`absolute left-2 md:left-8 top-1/2 -translate-y-1/2 z-30 p-2 md:p-4 bg-white/60 backdrop-blur-md border border-white/50 rounded-full md:opacity-0 group-hover/carousel:opacity-100 transition-all hover:bg-white hover:scale-110 text-brand-grey shadow-lg flex items-center justify-center 
-            ${!canScrollLeft ? "opacity-20 pointer-events-none" : ""}`}
+          className={`absolute left-2 md:left-8 top-1/2 -translate-y-1/2 z-30 p-2 bg-[#5a5a5a] rounded-full text-white shadow-md flex items-center justify-center transition-opacity
+            ${!canScrollLeft ? "opacity-20 pointer-events-none" : "opacity-100"}`}
         >
-          <ChevronLeft className="w-5 h-5 md:w-6 md:h-6" />
+          <ChevronLeft className="w-5 h-5" />
         </button>
         <button 
           onClick={() => handleArrowScroll("right")}
-          className={`absolute right-2 md:right-8 top-1/2 -translate-y-1/2 z-30 p-2 md:p-4 bg-white/60 backdrop-blur-md border border-white/50 rounded-full md:opacity-0 group-hover/carousel:opacity-100 transition-all hover:bg-white hover:scale-110 text-brand-grey shadow-lg flex items-center justify-center 
-            ${!canScrollRight ? "opacity-20 pointer-events-none" : ""}`}
+          className={`absolute right-2 md:right-8 top-1/2 -translate-y-1/2 z-30 p-2 bg-[#5a5a5a] rounded-full text-white shadow-md flex items-center justify-center transition-opacity
+            ${!canScrollRight ? "opacity-20 pointer-events-none" : "opacity-100"}`}
         >
-          <ChevronRight className="w-6 h-6" />
+          <ChevronRight className="w-5 h-5" />
         </button>
 
         <div 
@@ -263,6 +263,10 @@ export default function ReviewsSection({ dictionary }: { dictionary: any }) {
             ))}
           </div>
         </div>
+
+        {/* Editorial Fade Masks (Desktop only) */}
+        <div className="absolute left-0 top-0 bottom-0 w-32 bg-gradient-to-r from-[#F9EFE9] to-transparent z-20 pointer-events-none hidden md:block backdrop-blur-[1px]" />
+        <div className="absolute right-0 top-0 bottom-0 w-32 bg-gradient-to-l from-[#F9EFE9] to-transparent z-20 pointer-events-none hidden md:block backdrop-blur-[1px]" />
       </div>
 
       {/* CTA Section */}
