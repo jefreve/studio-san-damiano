@@ -7,18 +7,73 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 
 const INTERVAL_MS = 10000;
 
-// TODO: sostituire con dati e foto reali di tutti gli 11 dottori
 const doctors = [
   {
     name: "Dott.ssa Silvia Bonfiglio",
+    role: "Co-Founder",
     bio: "Silvia Bonfiglio, co-founder di Studio San Damiano, si avvale di un'esperienza decennale in clinic-management. Dopo una laurea in Fisioterapia, si avvicina alla Medicina Estetica e ne approfondisce i percorsi correlati alla sua formazione.\n\nA fine 2021 nasce il progetto di Studio San Damiano, dove la medicina estetica tende a costruire e ricostruire un'armonia e un equilibrio individuale.",
-    photo: null as string | null,
+    photo: "/equipe-medica/dottssa-silvia-bonfiglio.jpg",
   },
-  ...Array.from({ length: 10 }, (_, i) => ({
-    name: `Dott. [Nome Cognome ${i + 2}]`,
-    bio: "[Biografia placeholder — aggiornare con i dati reali del team.]",
-    photo: null as string | null,
-  })),
+  {
+    name: "Dott. Mario V. Longo",
+    role: "Medico Chirurgo · Founder di Studio San Damiano",
+    bio: "Si occupa di Medicina Estetica e Chirurgia.\n\nDocente A.C. del Master Universitario di II Livello di Medicina Estetica del Consorzio Universitario Humanitas Alta Formazione.\n\nSocio SIME.",
+    photo: "/equipe-medica/dott-mario-v-longo.jpg",
+  },
+  {
+    name: "Dott.ssa Ozana G. Cristea",
+    role: "Odontoiatra",
+    bio: "",
+    photo: "/equipe-medica/dottssa-ozana-g-cristea.webp",
+  },
+  {
+    name: "Dott. Alessandro Sorrenti",
+    role: "Odontoiatra",
+    bio: "",
+    photo: "/equipe-medica/dott-alessandro-sorrenti.jpg",
+  },
+  {
+    name: "Dott. Gianluca Marzorati",
+    role: "Odontoiatra",
+    bio: "",
+    photo: "/equipe-medica/dott-gianluca-marzorati.png",
+  },
+  {
+    name: "Dott. Roberto Logozzo",
+    role: "Odontoiatra · Specializzato in Ortodonzia e Gnatologia",
+    bio: "Si occupa di problemi articolari, terapie fisse, mobili e allineatori trasparenti.",
+    photo: "/equipe-medica/dott-roberto-logozzo.webp",
+  },
+  {
+    name: "Dott.ssa Vittoria Risso",
+    role: "Odontoiatra",
+    bio: "",
+    photo: "/equipe-medica/dottssa-vittoria-risso.webp",
+  },
+  {
+    name: "Dott. Roberto Berlusconi",
+    role: "Medico Specializzato in Anestesia e Rianimazione",
+    bio: "Si occupa di Sedazione Cosciente durante gli interventi odontoiatrici.",
+    photo: "/equipe-medica/dott-roberto-berlusconi.jpg",
+  },
+  {
+    name: "Dott.ssa Iole Cucinotto",
+    role: "Medico Chirurgo Oncologo · Medico Estetico · Socio Agorà",
+    bio: "",
+    photo: "/equipe-medica/dottssa-iole-cucinotto.jpg",
+  },
+  {
+    name: "Dott.ssa Valeria Colombo",
+    role: "Medico Chirurgo Maxillo Facciale · Medico Estetico",
+    bio: "Esperta in Medicina Rigenerativa e Carbossiterapia.",
+    photo: "/equipe-medica/dottssa-valeria-colombo.jpg",
+  },
+  {
+    name: "Dott. Ruggero Tagliabue",
+    role: "Medico Chirurgo",
+    bio: "Master in Medicina Estetica.\n\nProf. A.C. Università di Milano Bicocca\nProf. A.C. Università del Sacro Cuore di Roma\n\nSocio SIME · Socio AITEB",
+    photo: "/equipe-medica/dott-ruggero-tagliabue.jpg",
+  },
 ];
 
 export default function ChiSiamoSection() {
@@ -99,10 +154,15 @@ export default function ChiSiamoSection() {
             >
               {/* Testo */}
               <div className="md:col-span-5 flex flex-col justify-center">
-                <h2 className="text-xl md:text-2xl font-raleway font-bold text-brand-grey uppercase tracking-[0.06em] mb-7 leading-snug">
+                <h2 className="text-xl md:text-2xl font-raleway font-bold text-brand-grey uppercase tracking-[0.06em] mb-3 leading-snug">
                   {doc.name}
                 </h2>
-                {doc.bio.split("\n\n").map((para, i) => (
+                {doc.role && (
+                  <p className="text-[10px] uppercase tracking-[0.2em] text-brand-grey/45 font-open-sans mb-6">
+                    {doc.role}
+                  </p>
+                )}
+                {doc.bio && doc.bio.split("\n\n").map((para, i) => (
                   <p
                     key={i}
                     className="text-[11px] uppercase tracking-widest text-brand-grey/65 font-open-sans leading-loose mb-4"
