@@ -53,12 +53,19 @@ export default function Navbar({ lang, dictionary }: NavbarProps) {
     >
       <div className="w-full max-w-[1440px] mx-auto px-8 md:px-[32px] flex items-center justify-between">
         {/* Logo */}
-        <Link href={`/${lang}`} className="relative h-10 w-44 md:h-12 md:w-52 flex-shrink-0">
+        <Link 
+          href={`/${lang}`} 
+          className={`relative transition-all duration-300 flex-shrink-0 ${
+            isScrolled 
+              ? "h-10 w-44 md:h-12 md:w-52" 
+              : "h-14 w-64 md:h-20 md:w-80"
+          }`}
+        >
           <Image
             src="/san-damiano-assets/logo-sito-studio-san-damiano-1.png"
             alt="Studio San Damiano Logo"
             fill
-            sizes="(max-width: 768px) 176px, 208px"
+            sizes="(max-width: 768px) 256px, 320px"
             className="object-contain"
             priority
           />
