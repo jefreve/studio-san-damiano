@@ -1,6 +1,7 @@
 import { getDictionary } from "@/lib/get-dictionary";
 
 import HeroContent from "@/components/Hero/HeroContent";
+import UniqueExperienceSection from "@/components/UniqueExperience/UniqueExperienceSection";
 import TreatmentsSection from "@/components/Treatments/TreatmentsSection";
 import ReviewsSection from "@/components/Reviews/ReviewsSection";
 import ContactForm from "@/components/Contact/ContactForm";
@@ -19,6 +20,9 @@ export default async function Home({
       <section className="bg-[#F6E4D8] pt-12 pb-4 flex flex-col items-center overflow-hidden">
         <HeroContent />
       </section>
+
+      {/* Un'esperienza unica — temporaneamente nascosta */}
+      {/* <UniqueExperienceSection /> */}
 
       {/* Services Section Container */}
       <section className="bg-white" id="trattamenti-wrapper">

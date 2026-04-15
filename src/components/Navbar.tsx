@@ -120,13 +120,19 @@ export default function Navbar({ lang, dictionary }: NavbarProps) {
                 {item.title}
               </Link>
             ))}
-            <button 
+            <button
               onClick={() => setSecondaryMenuOpen(true)}
               className="flex items-center gap-1 text-[14px] font-bold font-open-sans uppercase tracking-premium text-brand-grey hover:opacity-70 transition-opacity cursor-pointer group"
             >
               <ArrowUpRight className="w-4 h-4 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
               <span>Esplora lo Studio</span>
             </button>
+            <Link
+              href={`/${lang}#contatti`}
+              className="bg-brand-grey text-white text-[13px] font-bold font-open-sans uppercase tracking-premium px-5 py-2.5 hover:bg-black transition-colors duration-200 whitespace-nowrap"
+            >
+              Prenota ora
+            </Link>
           </div>
 
           {/* 3. Mobile Menu Toggle (< 1024px) */}
@@ -162,6 +168,13 @@ export default function Navbar({ lang, dictionary }: NavbarProps) {
               {item.title}
             </Link>
           ))}
+          <Link
+            href={`/${lang}#contatti`}
+            onClick={() => setMobileMenuOpen(false)}
+            className="mt-4 bg-brand-grey text-white text-[15px] font-bold font-open-sans uppercase tracking-premium px-8 py-4 hover:bg-black transition-colors duration-200"
+          >
+            Prenota ora
+          </Link>
         </div>
       </div>
 
