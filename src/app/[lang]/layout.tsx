@@ -4,6 +4,7 @@ import "../globals.css";
 import { getDictionary } from "@/lib/get-dictionary";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer/Footer";
+import ChatWidget from "@/components/ChatWidget";
 
 const raleway = Raleway({
   variable: "--font-raleway",
@@ -44,6 +45,7 @@ export default async function LanguageLayout({
           {children}
         </main>
         <Footer />
+        <ChatWidget />
       </body>
     </html>
   );
