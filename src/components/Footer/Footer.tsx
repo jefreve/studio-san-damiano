@@ -5,7 +5,7 @@ import Image from "next/image";
 export default function Footer() {
   return (
     <footer className="bg-[#5A5A5A] text-white min-h-[750px] md:h-[600px] overflow-hidden font-open-sans">
-      {/* Container con margini laterali: aumentati a 140px su desktop e 40px su mobile */}
+      {/* Container con margini laterali: 140px su desktop e 40px su mobile */}
       <div className="w-full h-full px-10 md:px-[140px] pt-10 pb-16 font-open-sans">
         {/* Griglia principale: 1 colonna mobile, 2 colonne desktop */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-0 h-full font-open-sans">
@@ -64,8 +64,8 @@ export default function Footer() {
             </div>
           </div>
 
-          {/* PARTE DESTRA / BASSO: Per la O */}
-          <div className="flex flex-col justify-end items-end h-full mt-4 md:mt-0">
+          {/* PARTE DESTRA / BASSO: Per la O - Ripristinata in alto su desktop, in basso su mobile */}
+          <div className="flex flex-col justify-end md:justify-start items-end h-full mt-4 md:mt-0">
             {/* La O - Grande su mobile */}
             <div className="relative w-full aspect-[165/73] md:w-[650px] md:h-[288px] animate-float-smooth">
               <Image
@@ -73,7 +73,7 @@ export default function Footer() {
                 alt="San Damiano Icon"
                 fill
                 sizes="(max-width: 768px) 100vw, 650px"
-                className="object-contain object-right-bottom"
+                className="object-contain object-right-bottom md:object-right-top"
               />
             </div>
           </div>

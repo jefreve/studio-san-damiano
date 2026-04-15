@@ -109,21 +109,8 @@ export default function Navbar({ lang, dictionary }: NavbarProps) {
             />
           </Link>
 
-          {/* 1. Desktop Navigation FULL (> 1409px) */}
-          <div className="hidden min-[1410px]:flex items-center gap-6">
-            {allItems.map((item) => (
-              <Link
-                key={item.href}
-                href={item.href}
-                className="text-[14px] font-bold font-open-sans uppercase tracking-premium text-brand-grey hover:opacity-70 transition-opacity whitespace-nowrap"
-              >
-                {item.title}
-              </Link>
-            ))}
-          </div>
-
-          {/* 2. Desktop Navigation SPLIT (1024px - 1409px) */}
-          <div className="hidden lg:flex min-[1410px]:hidden items-center gap-8">
+          {/* Desktop Navigation SPLIT (Primary items + Explore) */}
+          <div className="hidden lg:flex items-center gap-8">
             {primaryItems.map((item) => (
               <Link
                 key={item.href}
