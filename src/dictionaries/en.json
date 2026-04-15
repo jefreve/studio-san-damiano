@@ -12,5 +12,15 @@
   "home": {
     "welcome": "Welcome to Studio San Damiano",
     "description": "Medical excellence at the service of your health."
+  },
+  "contact": {
+    "title": "KEEP\nIN TOUCH",
+    "subtitle": "Fill out the form to request more information about our treatments.",
+    "name": "Enter your full name*",
+    "email": "Enter your email*",
+    "phone": "Enter your phone number",
+    "message": "Enter your message*",
+    "privacy": "I declare that I have read the Privacy Policy drafted pursuant to art. 13 of EU Regulation 679/2016",
+    "submit": "SEND MESSAGE"
   }
 }

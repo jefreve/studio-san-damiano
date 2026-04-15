@@ -12,5 +12,15 @@
   "home": {
     "welcome": "Benvenuto nello Studio San Damiano",
     "description": "Eccellenza medica al servizio della tua salute."
+  },
+  "contact": {
+    "title": "TENIAMOCI\nIN CONTATTO",
+    "subtitle": "Compila il form per richiedere maggiori informazioni sui nostri trattamenti.",
+    "name": "Inserisci il tuo nome e cognome*",
+    "email": "Inserisci la tua mail*",
+    "phone": "Inserisci il tuo telefono",
+    "message": "Inserisci il tuo messaggio*",
+    "privacy": "Dichiaro di aver preso visione dell'Informativa Privacy redatta ai sensi dell'art. 13 del Regolamento UE 679/2016",
+    "submit": "INVIA IL MESSAGGIO"
   }
 }
