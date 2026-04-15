@@ -74,7 +74,7 @@ const ContactForm = ({ dictionary }: ContactFormProps) => {
         <h2 className="text-4xl md:text-[42px] font-bold text-[#5a5a5a] mb-4 tracking-premium uppercase whitespace-pre-line leading-[1.1]">
           {dictionary.contact.title}
         </h2>
-        <p className="text-[#5a5a5a] text-base font-normal leading-relaxed whitespace-nowrap">
+        <p className="text-[#5a5a5a] text-base font-normal leading-relaxed whitespace-normal md:whitespace-nowrap">
           {dictionary.contact.subtitle}
         </p>
       </div>
@@ -179,16 +179,16 @@ const ContactForm = ({ dictionary }: ContactFormProps) => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[100] flex items-center justify-center bg-black/40 backdrop-blur-sm p-0 md:p-8 overflow-hidden"
+            className="fixed inset-0 z-[100] flex items-center justify-center bg-black/40 backdrop-blur-sm p-0 md:p-8 overflow-hidden touch-none"
           >
             <motion.div
               initial={{ scale: 0.95, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.95, opacity: 0 }}
-              className="bg-[#F0F1EF] w-full h-[100dvh] md:h-[70vh] md:max-w-4xl flex flex-col p-6 md:p-8 border-0 md:border md:border-[#5a5a5a] relative shadow-2xl overflow-hidden"
+              className="bg-[#F0F1EF] w-full h-[100dvh] md:h-[70vh] md:max-w-4xl flex flex-col border-0 md:border md:border-[#5a5a5a] relative shadow-2xl overflow-hidden"
             >
-              {/* Header - Fixed */}
-              <div className="flex justify-end mb-4 flex-shrink-0">
+              {/* Header - No touch scroll */}
+              <div className="flex justify-end p-6 md:p-8 pb-2 md:pb-4 flex-shrink-0 touch-none">
                 <button
                   onClick={() => setIsModalOpen(false)}
                   className="p-2 text-[#5a5a5a] hover:bg-[#5a5a5a]/10 transition-colors rounded-full cursor-pointer"
@@ -197,20 +197,20 @@ const ContactForm = ({ dictionary }: ContactFormProps) => {
                 </button>
               </div>
               
-              {/* Textarea - Scrollable */}
-              <div className="flex-1 min-h-0">
+              {/* Textarea - Isolated scroll */}
+              <div className="flex-1 min-h-0 px-6 md:px-8">
                 <textarea
                   name="messaggio"
                   value={formData.messaggio}
                   onChange={handleChange}
                   placeholder={dictionary.contact.message}
-                  className="w-full h-full p-6 bg-[#F5F5F3] border border-[#5a5a5a] focus:outline-none transition-all placeholder:text-[#5a5a5a] placeholder:font-normal font-normal text-lg md:text-xl resize-none leading-relaxed overflow-y-auto"
+                  className="w-full h-full p-6 bg-[#F5F5F3] border border-[#5a5a5a] focus:outline-none transition-all placeholder:text-[#5a5a5a] placeholder:font-normal font-normal text-lg md:text-xl resize-none leading-relaxed overflow-y-auto overscroll-contain"
                   autoFocus
                 />
               </div>
               
-              {/* Footer - Fixed */}
-              <div className="mt-6 flex justify-end pb-safe flex-shrink-0">
+              {/* Footer - No touch scroll */}
+              <div className="p-6 md:p-8 pt-4 md:pt-6 flex justify-end pb-safe flex-shrink-0 touch-none">
                 <button
                   onClick={() => setIsModalOpen(false)}
                   className="bg-[#5a5a5a] text-white py-5 px-10 tracking-premium font-medium text-sm transition-all uppercase w-full md:w-auto shadow-lg"
