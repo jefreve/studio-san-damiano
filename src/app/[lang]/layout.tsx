@@ -3,6 +3,7 @@ import { Raleway, Open_Sans } from "next/font/google";
 import "../globals.css";
 import { getDictionary } from "@/lib/get-dictionary";
 import Navbar from "@/components/Navbar";
+import Footer from "@/components/Footer/Footer";
 
 const raleway = Raleway({
   variable: "--font-raleway",
@@ -42,6 +43,7 @@ export default async function LanguageLayout({
         <main className="flex-1 pt-24">
           {children}
         </main>
+        <Footer />
       </body>
     </html>
   );

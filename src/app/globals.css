@@ -35,3 +35,12 @@ h1, h2, h3, h4, h5, h6 {
 .tracking-premium {
   letter-spacing: 1.4px;
 }
+
+@keyframes float-smooth {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-12px); }
+}
+
+.animate-float-smooth {
+  animation: float-smooth 6s ease-in-out infinite;
+}
