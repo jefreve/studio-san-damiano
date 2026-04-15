@@ -100,7 +100,7 @@ export default function ReviewsSection({ dictionary }: { dictionary: any }) {
   });
 
   return (
-    <section className="bg-[#F9EFE9] py-24 overflow-hidden">
+    <section className="bg-[#F9EFE9] pt-16 pb-12 md:pt-16 md:pb-24 overflow-hidden">
 
       {/* ── Header with staggered fade-up ── */}
       <div className="container mx-auto px-6">

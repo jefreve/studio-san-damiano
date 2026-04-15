@@ -243,6 +243,7 @@ function CategoryCard({ category, onClick }: { category: any; onClick: () => voi
               fill 
               sizes="(max-width: 768px) 50vw, 300px"
               className="object-contain object-right" 
+              priority
             />
           </div>
         </div>
