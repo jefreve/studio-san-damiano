@@ -3,6 +3,7 @@ import { getDictionary } from "@/lib/get-dictionary";
 import HeroContent from "@/components/Hero/HeroContent";
 import UniqueExperienceSection from "@/components/UniqueExperience/UniqueExperienceSection";
 import TreatmentsSection from "@/components/Treatments/TreatmentsSection";
+import ChiSiamoSection from "@/components/ChiSiamo/ChiSiamoSection";
 import ReviewsSection from "@/components/Reviews/ReviewsSection";
 import ContactForm from "@/components/Contact/ContactForm";
 
@@ -30,6 +31,9 @@ export default async function Home({
            <TreatmentsSection dictionary={dictionary} />
         </div>
       </section>
+
+      {/* Chi Siamo / Equipe */}
+      <ChiSiamoSection />
 
       {/* Reviews Section */}
       <ReviewsSection dictionary={dictionary} />
