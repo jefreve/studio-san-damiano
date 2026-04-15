@@ -15,6 +15,7 @@ export interface Treatment {
     phone: string;
     email: string;
   };
+  logo?: string;
 }
 
 export interface CategoryData {
