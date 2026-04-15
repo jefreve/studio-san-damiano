@@ -26,10 +26,11 @@ export default function Navbar({ lang, dictionary }: NavbarProps) {
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [secondaryMenuOpen, setSecondaryMenuOpen] = useState(false);
+  const [isMenuTransitioning, setIsMenuTransitioning] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
-      setIsScrolled(window.scrollY > 10);
+      setIsScrolled(window.scrollY > 0);
     };
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
@@ -63,12 +64,28 @@ export default function Navbar({ lang, dictionary }: NavbarProps) {
 
   const allItems = [...primaryItems, ...secondaryItems];
 
+  const toggleMobileMenu = () => {
+    if (!mobileMenuOpen) {
+      setIsMenuTransitioning(true);
+      setTimeout(() => {
+        setMobileMenuOpen(true);
+      }, 100);
+    } else {
+      setMobileMenuOpen(false);
+      setTimeout(() => {
+        setIsMenuTransitioning(false);
+      }, 300);
+    }
+  };
+
   return (
     <>
       <nav
-        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 flex items-center ${
+        className={`fixed top-0 left-0 right-0 z-50 transition-[height,background-color,backdrop-filter] duration-300 flex items-center ${
           isScrolled
-            ? "bg-white/90 backdrop-blur-md h-[80px] shadow-sm border-b border-brand-grey/5"
+            ? isMenuTransitioning 
+              ? "bg-white h-[80px]" 
+              : "bg-white/90 backdrop-blur-md h-[80px] shadow-sm border-b border-brand-grey/5"
             : "bg-white h-[103px]"
         }`}
       >
@@ -76,7 +93,7 @@ export default function Navbar({ lang, dictionary }: NavbarProps) {
           {/* Logo */}
           <Link 
             href={`/${lang}`} 
-            className={`relative transition-all duration-300 flex-shrink-0 ${
+            className={`relative transition-[height,width] duration-300 flex-shrink-0 ${
               isScrolled 
                 ? "h-10 w-44 md:h-12 md:w-52" 
                 : "h-14 w-64 md:h-20 md:w-80"
@@ -128,7 +145,7 @@ export default function Navbar({ lang, dictionary }: NavbarProps) {
           {/* 3. Mobile Menu Toggle (< 1024px) */}
           <button
             className="lg:hidden text-brand-grey cursor-pointer"
-            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            onClick={toggleMobileMenu}
           >
             {mobileMenuOpen ? (
               <X className="w-7 h-7" strokeWidth={1} />
@@ -139,25 +156,27 @@ export default function Navbar({ lang, dictionary }: NavbarProps) {
             )}
           </button>
         </div>
-
-        {/* Mobile Menu Overlay (< 1024px) */}
-        <div className={`fixed inset-0 top-[76px] bg-white z-40 transition-all duration-500 lg:hidden ${
-          mobileMenuOpen ? "opacity-100 visible" : "opacity-0 invisible pointer-events-none"
-        }`}>
-          <div className="flex flex-col items-center justify-center h-full gap-8 p-6 overflow-y-auto">
-            {allItems.map((item) => (
-              <Link
-                key={item.href}
-                href={item.href}
-                className="text-lg font-bold font-open-sans uppercase tracking-premium text-brand-grey"
-                onClick={() => setMobileMenuOpen(false)}
-              >
-                {item.title}
-              </Link>
-            ))}
-          </div>
-        </div>
       </nav>
+
+      {/* Mobile Menu Overlay (< 1024px) */}
+      <div className={`fixed inset-0 z-[45] transition-all duration-300 lg:hidden bg-white ${
+        mobileMenuOpen ? "opacity-100 visible" : "opacity-0 invisible pointer-events-none"
+      }`}>
+        <div className={`flex flex-col items-center h-full gap-6 p-6 overflow-y-auto ${
+          isScrolled ? "pt-[100px]" : "pt-[130px]"
+        }`}>
+          {allItems.map((item) => (
+            <Link
+              key={item.href}
+              href={item.href}
+              className="text-[15px] font-bold font-open-sans uppercase tracking-premium text-brand-grey"
+              onClick={() => setMobileMenuOpen(false)}
+            >
+              {item.title}
+            </Link>
+          ))}
+        </div>
+      </div>
 
       {/* Secondary Menu Overlay (Panel - All Screens can trigger it if logic allows, but here it's for 1024-1409) */}
       <AnimatePresence>
