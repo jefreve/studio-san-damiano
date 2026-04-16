@@ -129,6 +129,10 @@ export default function Navbar({ lang, dictionary }: NavbarProps) {
             </button>
             <Link
               href={`/${lang}#contatti`}
+              onClick={(e) => {
+                e.preventDefault();
+                (window as any).rbOpenWidget?.();
+              }}
               className="bg-brand-grey text-white text-[13px] font-bold font-open-sans uppercase tracking-premium px-5 py-2.5 hover:bg-black transition-colors duration-200 whitespace-nowrap"
             >
               Prenota ora
@@ -170,7 +174,11 @@ export default function Navbar({ lang, dictionary }: NavbarProps) {
           ))}
           <Link
             href={`/${lang}#contatti`}
-            onClick={() => setMobileMenuOpen(false)}
+            onClick={(e) => {
+              e.preventDefault();
+              setMobileMenuOpen(false);
+              (window as any).rbOpenWidget?.();
+            }}
             className="mt-4 bg-brand-grey text-white text-[15px] font-bold font-open-sans uppercase tracking-premium px-8 py-4 hover:bg-black transition-colors duration-200"
           >
             Prenota ora
