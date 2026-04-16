@@ -53,6 +53,12 @@ function TextCell({ doc }: { doc: Doctor }) {
   );
 }
 
+// Splits "Dott. Mario V. Longo" → { title: "Dott.", nameOnly: "Mario V. Longo" }
+function parseName(full: string) {
+  const match = full.match(/^(Dott\.ssa|Dott\.)\s+(.+)$/);
+  return match ? { title: match[1], nameOnly: match[2] } : { title: "", nameOnly: full };
+}
+
 export default function ChiSiamoSection() {
   const [current, setCurrent] = useState(0);
   const [resetKey, setResetKey] = useState(0);
@@ -139,9 +145,12 @@ export default function ChiSiamoSection() {
                     className="object-cover object-top grayscale"
                     sizes="50vw"
                   />
+                  <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/95 via-black/70 to-transparent px-3 pt-20 pb-1.5 text-center">
+                    <p className="text-white text-[8px] font-open-sans uppercase tracking-widest">{parseName(slide[0].name).title}</p>
+                  </div>
                 </div>
-                <div className="bg-[#5a5a5a] px-3 py-2">
-                  <p className="text-white text-[9px] font-open-sans uppercase tracking-wider leading-tight">{slide[0].name}</p>
+                <div className="bg-[#5a5a5a] px-3 py-2 text-center">
+                  <p className="text-white text-[9px] font-open-sans uppercase tracking-wider leading-tight">{parseName(slide[0].name).nameOnly}</p>
                 </div>
               </div>
 
@@ -156,9 +165,12 @@ export default function ChiSiamoSection() {
                       className="object-cover object-top grayscale"
                       sizes="50vw"
                     />
+                    <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/95 via-black/70 to-transparent px-3 pt-20 pb-1.5 text-center">
+                      <p className="text-white text-[8px] font-open-sans uppercase tracking-widest">{parseName(slide[1].name).title}</p>
+                    </div>
                   </div>
-                  <div className="bg-[#5a5a5a] px-3 py-2">
-                    <p className="text-white text-[9px] font-open-sans uppercase tracking-wider leading-tight">{slide[1].name}</p>
+                  <div className="bg-[#5a5a5a] px-3 py-2 text-center">
+                    <p className="text-white text-[9px] font-open-sans uppercase tracking-wider leading-tight">{parseName(slide[1].name).nameOnly}</p>
                   </div>
                 </div>
               ) : (
