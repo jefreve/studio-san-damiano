@@ -122,7 +122,7 @@ function PhotoCell({ doc, titleOverlay = true }: { doc: Doctor; titleOverlay?: b
         )}
       </div>
       <div className="bg-[#5a5a5a] px-3 py-2 text-center shrink-0">
-        <p className="text-white text-[9px] font-open-sans uppercase tracking-wider leading-tight">{nameOnly}</p>
+        <p className="text-white text-[11px] md:text-[9px] font-open-sans uppercase tracking-wider leading-tight">{nameOnly}</p>
       </div>
     </div>
   );
