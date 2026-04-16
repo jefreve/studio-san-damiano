@@ -75,7 +75,7 @@ function PhotoCell({ doc, titleOverlay = true }: { doc: Doctor; titleOverlay?: b
   return (
     <div className="flex flex-col h-full overflow-hidden bg-[#F6F6F6]">
       <div className="relative flex-1 bg-[#F6E4D8]">
-        <Image src={doc.photo} alt={doc.name} fill className="object-cover object-top grayscale" sizes="50vw" />
+        <Image src={doc.photo} alt={doc.name} fill className="object-cover object-top grayscale" sizes="50vw" priority />
         {titleOverlay && title && (
           <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/95 via-black/70 to-transparent px-3 pt-20 pb-1.5 text-center">
             <p className="text-white text-[8px] font-open-sans uppercase tracking-widest">{title}</p>
@@ -181,14 +181,14 @@ export default function ChiSiamoSection() {
             <div className="hidden md:flex md:divide-x md:divide-brand-grey/10">
               <div className="flex flex-row gap-10 items-stretch w-1/2">
                 <div className="relative w-[200px] shrink-0 h-[280px]">
-                  <Image src={slide[0].photo} alt={slide[0].name} fill className="object-cover object-top grayscale" sizes="200px" />
+                  <Image src={slide[0].photo} alt={slide[0].name} fill className="object-cover object-top grayscale" sizes="200px" priority />
                 </div>
                 <TextCell doc={slide[0]} />
               </div>
               {slide[1] && (
                 <div className="flex flex-row gap-10 items-stretch w-1/2 pl-12">
                   <div className="relative w-[200px] shrink-0 h-[280px]">
-                    <Image src={slide[1].photo} alt={slide[1].name} fill className="object-cover object-top grayscale" sizes="200px" />
+                    <Image src={slide[1].photo} alt={slide[1].name} fill className="object-cover object-top grayscale" sizes="200px" priority />
                   </div>
                   <TextCell doc={slide[1]} />
                 </div>
