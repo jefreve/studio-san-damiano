@@ -22,9 +22,12 @@ const allDoctors: Doctor[] = [
 ];
 
 const DESKTOP_SLIDES: Doctor[][] = [
-  [allDoctors[0]], [allDoctors[1]], [allDoctors[2], allDoctors[3]],
-  [allDoctors[4], allDoctors[5]], [allDoctors[6], allDoctors[7]],
-  [allDoctors[8], allDoctors[9]], [allDoctors[10]]
+  [allDoctors[0], allDoctors[1]],
+  [allDoctors[2], allDoctors[3]],
+  [allDoctors[4], allDoctors[5]],
+  [allDoctors[6], allDoctors[7]],
+  [allDoctors[8], allDoctors[9]],
+  [allDoctors[10]],
 ];
 
 const MOBILE_SLIDES: Doctor[][] = [
@@ -42,22 +45,18 @@ function TextCell({ doc, hideBio = false }: { doc: Doctor; hideBio?: boolean }) 
   const hasBio = !!doc.bio && !hideBio;
   const isSpecial = doc.name === "Dott. Roberto Logozzo";
   return (
-    <div className={`flex flex-col h-full bg-[#F6F6F6] ${hasBio ? (doc.name === "Dott.ssa Valeria Colombo" ? "pt-1 px-4 pb-3" : "pt-2 px-4 pb-3") + " justify-start" : "p-5 justify-center"}`}>
+    <div className={`flex flex-col h-full flex-1 bg-[#F6F6F6] ${hasBio ? (doc.name === "Dott.ssa Valeria Colombo" ? "pt-1 px-4 pb-3" : "pt-2 px-4 pb-3") + " justify-start" : "p-5 justify-center md:pt-2 md:px-4 md:pb-3 md:justify-start"}`}>
       <p className={`text-[10px] md:text-[9px] uppercase tracking-[0.2em] text-brand-grey/70 font-open-sans ${doc.name === "Dott.ssa Valeria Colombo" ? "mb-0.5 md:leading-normal" : "mb-1.5"} ${(!hasBio && !hideBio) ? "text-center md:text-left" : ""}`}>
         {doc.name === "Dott.ssa Valeria Colombo" ? (
           <>
             <span className="md:hidden">{doc.role}</span>
-            <span className="hidden md:inline">
-              MEDICO CHIRURGO<br />
-              MAXILLO FACCIALE<br />
-              MEDICO ESTETICO
-            </span>
+            <span className="hidden md:inline">MEDICO CHIRURGO · MAXILLO FACCIALE · MEDICO ESTETICO</span>
           </>
         ) : doc.role}
       </p>
       <h3 className="hidden md:block text-[11px] md:text-lg font-raleway font-bold text-brand-grey uppercase tracking-[0.05em] leading-snug mb-2 md:mb-3">{doc.name}</h3>
       {hasBio && (
-        <div className="flex-1 overflow-y-auto pr-1 custom-scrollbar">
+        <div className="flex-1 md:flex-none overflow-y-auto pr-1 custom-scrollbar">
           <div className="space-y-1 md:space-y-2">
             {doc.bio.split("\n\n").map((p, i) => (
               <p key={i} className={`${isSpecial ? "text-[13px] italic text-brand-grey/75" : "text-[9px] md:text-[12px] text-brand-grey/55"} font-open-sans leading-relaxed`}>
@@ -180,21 +179,21 @@ export default function ChiSiamoSection() {
             </div>
 
             <div className="hidden md:flex md:divide-x md:divide-brand-grey/10">
-              <div className="flex flex-row gap-10 items-center flex-1">
-                <div className="relative w-[160px] shrink-0 h-[220px] bg-[#F6E4D8]">
-                  <Image src={slide[0].photo} alt={slide[0].name} fill className="object-contain object-bottom grayscale" sizes="160px" />
+              <div className="flex flex-row gap-10 items-stretch w-1/2">
+                <div className="relative w-[200px] shrink-0 h-[280px]">
+                  <Image src={slide[0].photo} alt={slide[0].name} fill className="object-cover object-top grayscale" sizes="200px" />
                 </div>
                 <TextCell doc={slide[0]} />
               </div>
               {slide[1] && (
-                <div className="flex flex-row gap-10 items-center flex-1 pl-12">
-                  <div className="relative w-[160px] shrink-0 h-[220px] bg-[#F6E4D8]">
-                    <Image src={slide[1].photo} alt={slide[1].name} fill className="object-contain object-bottom grayscale" sizes="160px" />
+                <div className="flex flex-row gap-10 items-stretch w-1/2 pl-12">
+                  <div className="relative w-[200px] shrink-0 h-[280px]">
+                    <Image src={slide[1].photo} alt={slide[1].name} fill className="object-cover object-top grayscale" sizes="200px" />
                   </div>
                   <TextCell doc={slide[1]} />
                 </div>
               )}
-              {!slide[1] && <div className="md:pl-12 md:flex-1 hidden md:block" />}
+              {!slide[1] && <div className="w-1/2 hidden md:block" />}
             </div>
           </motion.div>
         </AnimatePresence>
