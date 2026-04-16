@@ -7,46 +7,40 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 
 type Doctor = { name: string; role: string; bio: string; photo: string };
 
-// 7 slides total: 
-// 01: Silvia (Hero), 02: Mario (Hero), 03-06: Pairs, 07: Ruggero (Hero)
-const slides: Doctor[][] = [
-  [
-    { name: "Dott.ssa Silvia Bonfiglio", role: "Co-Founder", bio: "Co-founder di Studio San Damiano, si avvale di un'esperienza decennale in clinic-management. Dopo una laurea in Fisioterapia, si avvicina alla Medicina Estetica approfondendone i percorsi.\n\nA fine 2021 nasce il progetto di Studio San Damiano, dove la medicina estetica tende a costruire e ricostruire un'armonia e un equilibrio individuale.", photo: "/equipe-medica/dottssa-silvia-bonfiglio.jpg" },
-  ],
-  [
-    { name: "Dott. Mario V. Longo", role: "Medico Chirurgo · Founder", bio: "Si occupa di Medicina Estetica e Chirurgia. Docente A.C. del Master Universitario di II Livello di Medicina Estetica del Consorzio Universitario Humanitas.\n\nSocio SIME.", photo: "/equipe-medica/dott-mario-v-longo.jpg" },
-  ],
-  [
-    { name: "Dott.ssa Ozana G. Cristea", role: "Odontoiatra", bio: "", photo: "/equipe-medica/dottssa-ozana-g-cristea.webp" },
-    { name: "Dott. Alessandro Sorrenti", role: "Odontoiatra", bio: "", photo: "/equipe-medica/dott-alessandro-sorrenti.jpg" },
-  ],
-  [
-    { name: "Dott. Gianluca Marzorati", role: "Odontoiatra", bio: "", photo: "/equipe-medica/dott-gianluca-marzorati.png" },
-    { name: "Dott. Roberto Logozzo", role: "Odontoiatra · Ortodonzia e Gnatologia", bio: "Si occupa di problemi articolari, terapie fisse, mobili e allineatori trasparenti.", photo: "/equipe-medica/dott-roberto-logozzo.webp" },
-  ],
-  [
-    { name: "Dott.ssa Vittoria Risso", role: "Odontoiatra", bio: "", photo: "/equipe-medica/dottssa-vittoria-risso.webp" },
-    { name: "Dott. Roberto Berlusconi", role: "Anestesia e Rianimazione", bio: "Si occupa di Sedazione Cosciente durante gli interventi odontoiatrici.", photo: "/equipe-medica/dott-roberto-berlusconi.jpg" },
-  ],
-  [
-    { name: "Dott.ssa Iole Cucinotto", role: "Medico Chirurgo Oncologo · Medico Estetico · Socio Agorà", bio: "", photo: "/equipe-medica/dottssa-iole-cucinotto.jpg" },
-    { name: "Dott.ssa Valeria Colombo", role: "Medico Chirurgo Maxillo Facciale · Medico Estetico", bio: "Esperta in Medicina Rigenerativa e Carbossiterapia.", photo: "/equipe-medica/dottssa-valeria-colombo.jpg" },
-  ],
-  [
-    { name: "Dott. Ruggero Tagliabue", role: "Medico Chirurgo", bio: "Master in Medicina Estetica. Prof. A.C. Università di Milano Bicocca e Università del Sacro Cuore di Roma.\n\nSocio SIME · Socio AITEB.", photo: "/equipe-medica/dott-ruggero-tagliabue.jpg" },
-  ],
+const allDoctors: Doctor[] = [
+  { name: "Dott.ssa Silvia Bonfiglio", role: "Co-Founder", bio: "Co-founder di Studio San Damiano, si avvale di un'esperienza decennale in clinic-management. Dopo una laurea in Fisioterapia, si avvicina alla Medicina Estetica approfondendone i percorsi.\n\nA fine 2021 nasce il progetto di Studio San Damiano, dove la medicina estetica tende a costruire e ricostruire un'armonia e un equilibrio individuale.", photo: "/equipe-medica/dottssa-silvia-bonfiglio.jpg" },
+  { name: "Dott. Mario V. Longo", role: "Medico Chirurgo · Founder", bio: "Si occupa di Medicina Estetica e Chirurgia. Docente A.C. del Master Universitario di II Livello di Medicina Estetica del Consorzio Universitario Humanitas.\n\nSocio SIME.", photo: "/equipe-medica/dott-mario-v-longo.jpg" },
+  { name: "Dott.ssa Ozana G. Cristea", role: "Odontoiatra", bio: "", photo: "/equipe-medica/dottssa-ozana-g-cristea.webp" },
+  { name: "Dott. Alessandro Sorrenti", role: "Odontoiatra", bio: "", photo: "/equipe-medica/dott-alessandro-sorrenti.jpg" },
+  { name: "Dott. Gianluca Marzorati", role: "Odontoiatra", bio: "", photo: "/equipe-medica/dott-gianluca-marzorati.png" },
+  { name: "Dott. Roberto Logozzo", role: "Odontoiatra · Ortodonzia e Gnatologia", bio: "Si occupa di problemi articolari, terapie fisse, mobili e allineatori trasparenti.", photo: "/equipe-medica/dott-roberto-logozzo.webp" },
+  { name: "Dott.ssa Vittoria Risso", role: "Odontoiatra", bio: "", photo: "/equipe-medica/dottssa-vittoria-risso.webp" },
+  { name: "Dott. Roberto Berlusconi", role: "Anestesia e Rianimazione", bio: "Si occupa di Sedazione Cosciente durante gli interventi odontoiatrici.", photo: "/equipe-medica/dott-roberto-berlusconi.jpg" },
+  { name: "Dott.ssa Iole Cucinotto", role: "Medico Chirurgo Oncologo · Medico Estetico · Socio Agorà", bio: "", photo: "/equipe-medica/dottssa-iole-cucinotto.jpg" },
+  { name: "Dott.ssa Valeria Colombo", role: "Medico Chirurgo Maxillo Facciale · Medico Estetico", bio: "Esperta in Medicina Rigenerativa e Carbossiterapia.", photo: "/equipe-medica/dottssa-valeria-colombo.jpg" },
+  { name: "Dott. Ruggero Tagliabue", role: "Medico Chirurgo", bio: "Master in Medicina Estetica. Prof. A.C. Università di Milano Bicocca e Università del Sacro Cuore di Roma.\n\nSocio SIME · Socio AITEB.", photo: "/equipe-medica/dott-ruggero-tagliabue.jpg" },
 ];
 
-const TOTAL = slides.length;
+const DESKTOP_SLIDES: Doctor[][] = [
+  [allDoctors[0]], [allDoctors[1]], [allDoctors[2], allDoctors[3]],
+  [allDoctors[4], allDoctors[5]], [allDoctors[6], allDoctors[7]],
+  [allDoctors[8], allDoctors[9]], [allDoctors[10]]
+];
+
+const MOBILE_SLIDES: Doctor[][] = [
+  [allDoctors[0]], [allDoctors[1]], [allDoctors[2], allDoctors[3]],
+  [allDoctors[4], allDoctors[6]], [allDoctors[5]], [allDoctors[7]],
+  [allDoctors[9]], [allDoctors[10]], [allDoctors[8]]
+];
 
 function parseName(full: string) {
   const match = full.match(/^(Dott\.ssa|Dott\.)\s+(.+)$/);
   return match ? { title: match[1], nameOnly: match[2] } : { title: "", nameOnly: full };
 }
 
-// Fixed-height TextCell matches the aspect ratio of the PhotoCell
 function TextCell({ doc, hideBio = false }: { doc: Doctor; hideBio?: boolean }) {
   const hasBio = !!doc.bio && !hideBio;
+  const isSpecial = doc.name === "Dott. Roberto Logozzo";
   return (
     <div className={`flex flex-col h-full bg-[#F6F6F6] ${hasBio ? "pt-2 px-4 pb-3 justify-start" : "p-5 justify-center"}`}>
       <p className={`text-[10px] md:text-[9px] uppercase tracking-[0.2em] text-brand-grey/70 font-open-sans mb-1.5 ${(!hasBio && !hideBio) ? "text-center md:text-left" : ""}`}>
@@ -57,7 +51,7 @@ function TextCell({ doc, hideBio = false }: { doc: Doctor; hideBio?: boolean }) 
         <div className="flex-1 overflow-y-auto pr-1 custom-scrollbar">
           <div className="space-y-1 md:space-y-2">
             {doc.bio.split("\n\n").map((p, i) => (
-              <p key={i} className="text-[9px] md:text-[12px] text-brand-grey/55 font-open-sans leading-relaxed">
+              <p key={i} className={`${isSpecial ? "text-[13px] italic text-brand-grey/75" : "text-[9px] md:text-[12px] text-brand-grey/55"} font-open-sans leading-relaxed`}>
                 {p}
               </p>
             ))}
@@ -73,13 +67,7 @@ function PhotoCell({ doc, titleOverlay = true }: { doc: Doctor; titleOverlay?: b
   return (
     <div className="flex flex-col h-full overflow-hidden bg-[#F6F6F6]">
       <div className="relative flex-1 bg-[#F6E4D8]">
-        <Image
-          src={doc.photo}
-          alt={doc.name}
-          fill
-          className="object-cover object-top grayscale"
-          sizes="50vw"
-        />
+        <Image src={doc.photo} alt={doc.name} fill className="object-cover object-top grayscale" sizes="50vw" />
         {titleOverlay && title && (
           <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/95 via-black/70 to-transparent px-3 pt-20 pb-1.5 text-center">
             <p className="text-white text-[8px] font-open-sans uppercase tracking-widest">{title}</p>
@@ -95,55 +83,42 @@ function PhotoCell({ doc, titleOverlay = true }: { doc: Doctor; titleOverlay?: b
 
 export default function ChiSiamoSection() {
   const [current, setCurrent] = useState(0);
+  const [isMobile, setIsMobile] = useState(false);
   const [resetKey, setResetKey] = useState(0);
   const sectionRef = useRef<HTMLDivElement>(null);
   const touchStartX = useRef(0);
   const lastWheelTime = useRef(0);
 
+  useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth < 768);
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
+
+  const activeSlides = isMobile ? MOBILE_SLIDES : DESKTOP_SLIDES;
+  const TOTAL = activeSlides.length;
+
   const navigate = useCallback((dir: 1 | -1) => {
     setCurrent((prev) => ((prev + dir) % TOTAL + TOTAL) % TOTAL);
     setResetKey((k) => k + 1);
-  }, []);
+  }, [TOTAL]);
 
   useEffect(() => {
-    const timer = setInterval(() => {
-      setCurrent((prev) => (prev + 1) % TOTAL);
-    }, 7000);
+    const timer = setInterval(() => setCurrent((prev) => (prev + 1) % TOTAL), 7000);
     return () => clearInterval(timer);
-  }, [resetKey]);
+  }, [resetKey, TOTAL]);
 
-  useEffect(() => {
-    const el = sectionRef.current;
-    if (!el) return;
-    const onWheel = (e: WheelEvent) => {
-      const absX = Math.abs(e.deltaX), absY = Math.abs(e.deltaY);
-      if (absX > absY && absX > 20) {
-        const now = Date.now();
-        if (now - lastWheelTime.current < 800) return;
-        lastWheelTime.current = now;
-        e.preventDefault();
-        navigate(e.deltaX > 0 ? 1 : -1);
-      }
-    };
-    el.addEventListener("wheel", onWheel, { passive: false });
-    return () => el.removeEventListener("wheel", onWheel);
-  }, [navigate]);
-
-  const slide = slides[current];
+  const slide = activeSlides[current] || activeSlides[0];
 
   return (
-    <section
-      ref={sectionRef}
-      id="equipe"
-      className="bg-white py-12 md:py-16 overflow-hidden"
+    <section ref={sectionRef} id="equipe" className="bg-white py-12 md:py-16 overflow-hidden" 
       onTouchStart={(e) => { touchStartX.current = e.touches[0].clientX; }}
       onTouchEnd={(e) => {
         const diff = touchStartX.current - e.changedTouches[0].clientX;
         if (Math.abs(diff) > 50) navigate(diff > 0 ? 1 : -1);
-      }}
-    >
+      }}>
       <div className="max-w-[1440px] mx-auto px-8 md:px-[32px]">
-
         <div className="text-center mb-8 md:mb-12">
           <h2 className="text-3xl md:text-4xl font-raleway font-bold text-brand-grey leading-tight tracking-tight">
             Equipe <span className="text-brand-grey/40">medica.</span>
@@ -151,55 +126,50 @@ export default function ChiSiamoSection() {
         </div>
 
         <AnimatePresence mode="wait">
-          <motion.div
-            key={current}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.5, ease: "easeInOut" }}
-          >
-            {/* ── MOBILE ── */}
+          <motion.div key={`${isMobile}-${current}`} initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.5 }}>
             <div className="md:hidden aspect-[4/5] w-full overflow-hidden">
               {slide.length === 1 ? (
-                /* HERO Layout: Silvia, Mario, Tagliabue */
                 <div className="grid grid-rows-2 h-full">
                   <div className="grid grid-cols-2 h-full">
-                    {/* Even slides: Text Left | Odd slides: Text Right (for variety) */}
                     {current % 2 === 0 ? (
-                      <>
-                        <div className="h-full"><TextCell doc={slide[0]} hideBio /></div>
-                        <div className="h-full"><PhotoCell doc={slide[0]} /></div>
-                      </>
+                      <><div className="h-full"><TextCell doc={slide[0]} hideBio /></div><div className="h-full"><PhotoCell doc={slide[0]} /></div></>
                     ) : (
-                      <>
-                        <div className="h-full"><PhotoCell doc={slide[0]} /></div>
-                        <div className="h-full"><TextCell doc={slide[0]} hideBio /></div>
-                      </>
+                      <><div className="h-full"><PhotoCell doc={slide[0]} /></div><div className="h-full"><TextCell doc={slide[0]} hideBio /></div></>
                     )}
                   </div>
-                  {/* Lower half: full width description */}
-                  <div className="bg-[#F6F6F6] p-5 h-full overflow-y-auto border-t border-white/40">
-                    <div className="space-y-3">
-                      {slide[0].bio.split("\n\n").map((p, i) => (
-                        <p key={i} className="text-[12px] text-brand-grey/70 font-open-sans leading-relaxed">
-                          {p}
-                        </p>
-                      ))}
-                    </div>
+                  <div className="bg-[#F6F6F6] p-5 h-full relative overflow-hidden border-t border-white/40">
+                    {slide[0].bio ? (
+                      <div className="space-y-3">
+                        {slide[0].bio.split("\n\n").map((p, i) => (
+                          <p key={i} className="text-[13px] text-brand-grey/75 font-open-sans leading-relaxed italic">{p}</p>
+                        ))}
+                      </div>
+                    ) : (
+                      <div className="h-full flex items-center justify-center">
+                        <motion.div 
+                          animate={{ y: [0, -20, 0] }} 
+                          transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+                          className="relative w-32 h-32 opacity-60"
+                        >
+                          <Image
+                            src="/icona-o-rosa.webp"
+                            alt="San Damiano Icon"
+                            fill
+                            className="object-contain"
+                          />
+                        </motion.div>
+                      </div>
+                    )}
                   </div>
                 </div>
               ) : (
-                /* PAIR Layout: Alessandro Sorrenti style */
                 <div className="grid grid-cols-2 grid-rows-2 h-full">
-                  <div className="h-full"><TextCell doc={slide[0]} /></div>
-                  <div className="h-full"><PhotoCell doc={slide[0]} /></div>
-                  <div className="h-full"><PhotoCell doc={slide[1]} /></div>
-                  <div className="h-full"><TextCell doc={slide[1]} /></div>
+                  <div className="h-full"><TextCell doc={slide[0]} /></div><div className="h-full"><PhotoCell doc={slide[0]} /></div>
+                  <div className="h-full"><PhotoCell doc={slide[1]} /></div><div className="h-full"><TextCell doc={slide[1]} /></div>
                 </div>
               )}
             </div>
 
-            {/* ── DESKTOP ── */}
             <div className="hidden md:flex md:divide-x md:divide-brand-grey/10">
               <div className="flex flex-row gap-10 items-center flex-1">
                 <div className="relative w-[160px] shrink-0 h-[220px] bg-[#F6E4D8]">
@@ -231,7 +201,6 @@ export default function ChiSiamoSection() {
             <ChevronRight className="w-4 h-4 text-brand-grey group-hover:text-white" />
           </button>
         </div>
-
       </div>
       <style jsx global>{`
         .custom-scrollbar::-webkit-scrollbar { width: 2px; }
