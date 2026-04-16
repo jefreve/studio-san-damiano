@@ -203,7 +203,7 @@ export default function ChiSiamoSection() {
             <ChevronLeft className="w-4 h-4 text-brand-grey group-hover:text-white" />
           </button>
           <span className="text-[11px] font-open-sans text-brand-grey/35 tracking-widest shrink-0">
-            {String(current + 1).padStart(2, "0")} / {String(TOTAL).padStart(2, "0")}
+            {current + 1} / {TOTAL}
           </span>
           <button onClick={() => navigate(1)} className="w-9 h-9 border border-brand-grey/20 flex items-center justify-center hover:bg-brand-grey hover:border-brand-grey transition-colors group shrink-0">
             <ChevronRight className="w-4 h-4 text-brand-grey group-hover:text-white" />
