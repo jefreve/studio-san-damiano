@@ -48,6 +48,10 @@ export default function Navbar({ lang, dictionary }: NavbarProps) {
     };
   }, [secondaryMenuOpen, mobileMenuOpen]);
 
+  const openBooking = () => {
+    if (typeof window !== "undefined") (window as any).rbOpenWidget?.();
+  };
+
   const primaryItems = [
     { title: dictionary.navbar.trattamenti, href: `/${lang}#trattamenti` },
     { title: dictionary.navbar.equipe, href: `/${lang}#equipe` },
@@ -109,8 +113,8 @@ export default function Navbar({ lang, dictionary }: NavbarProps) {
             />
           </Link>
 
-          {/* Desktop Navigation SPLIT (Primary items + Explore) */}
-          <div className="hidden lg:flex items-center gap-8">
+          {/* Desktop Navigation SPLIT (Primary items + Explore + Prenota) */}
+          <div className="max-lg:hidden lg:flex items-center gap-8">
             {primaryItems.map((item) => (
               <Link
                 key={item.href}
@@ -127,16 +131,12 @@ export default function Navbar({ lang, dictionary }: NavbarProps) {
               <ArrowUpRight className="w-4 h-4 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
               <span>Esplora lo Studio</span>
             </button>
-            <Link
-              href={`/${lang}#contatti`}
-              onClick={(e) => {
-                e.preventDefault();
-                (window as any).rbOpenWidget?.();
-              }}
-              className="bg-brand-grey text-white text-[13px] font-bold font-open-sans uppercase tracking-premium px-5 py-2.5 hover:bg-black transition-colors duration-200 whitespace-nowrap"
+            <button
+              onClick={openBooking}
+              className="bg-[#5a5a5a] text-white h-10 px-6 font-raleway font-bold text-[12px] uppercase tracking-widest hover:bg-[#3d3d3d] transition-colors whitespace-nowrap"
             >
-              Prenota ora
-            </Link>
+              Prenota Ora
+            </button>
           </div>
 
           {/* 3. Mobile Menu Toggle (< 1024px) */}
@@ -162,6 +162,12 @@ export default function Navbar({ lang, dictionary }: NavbarProps) {
         <div className={`flex flex-col items-center h-full gap-6 p-6 overflow-y-auto ${
           isScrolled ? "pt-[100px]" : "pt-[130px]"
         }`}>
+          <button
+            onClick={() => { setMobileMenuOpen(false); openBooking(); }}
+            className="bg-[#5a5a5a] text-white h-12 px-8 font-raleway font-bold text-[13px] uppercase tracking-widest hover:bg-[#3d3d3d] transition-colors"
+          >
+            Prenota Ora
+          </button>
           {allItems.map((item) => (
             <Link
               key={item.href}
@@ -172,17 +178,6 @@ export default function Navbar({ lang, dictionary }: NavbarProps) {
               {item.title}
             </Link>
           ))}
-          <Link
-            href={`/${lang}#contatti`}
-            onClick={(e) => {
-              e.preventDefault();
-              setMobileMenuOpen(false);
-              (window as any).rbOpenWidget?.();
-            }}
-            className="mt-4 bg-brand-grey text-white text-[15px] font-bold font-open-sans uppercase tracking-premium px-8 py-4 hover:bg-black transition-colors duration-200"
-          >
-            Prenota ora
-          </Link>
         </div>
       </div>
 

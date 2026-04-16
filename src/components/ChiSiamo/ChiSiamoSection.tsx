@@ -160,7 +160,7 @@ export default function ChiSiamoSection() {
 
   return (
     <section ref={sectionRef} id="equipe" className="py-12 md:py-16 overflow-hidden" 
-      style={{ background: 'linear-gradient(to bottom, #FFFFFF 85%, #F9EFE9 100%)' }}
+      style={{ background: '#FFFFFF' }}
       onTouchStart={(e) => { touchStartX.current = e.touches[0].clientX; }}
       onTouchEnd={(e) => {
         const diff = touchStartX.current - e.changedTouches[0].clientX;

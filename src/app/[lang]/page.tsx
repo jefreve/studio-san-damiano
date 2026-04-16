@@ -6,6 +6,7 @@ import TreatmentsSection from "@/components/Treatments/TreatmentsSection";
 import ChiSiamoSection from "@/components/ChiSiamo/ChiSiamoSection";
 import ReviewsSection from "@/components/Reviews/ReviewsSection";
 import ContactForm from "@/components/Contact/ContactForm";
+import ParlanoDiNoiSection from "@/components/ParlanoDiNoi/ParlanoDiNoiSection";
 
 export default async function Home({
   params,
@@ -20,7 +21,7 @@ export default async function Home({
       {/* Hero Section */}
       <section 
         className="pt-12 pb-4 flex flex-col items-center overflow-hidden"
-        style={{ background: 'linear-gradient(to bottom, #F6E4D8 0%, #F6E4D8 85%, #FFFFFF 100%)' }}
+        style={{ background: '#F6E4D8' }}
       >
         <HeroContent />
       </section>
@@ -40,6 +41,9 @@ export default async function Home({
 
       {/* Chi Siamo / Equipe */}
       <ChiSiamoSection />
+
+      {/* Parlano di noi / Press */}
+      <ParlanoDiNoiSection dictionary={dictionary} />
 
       {/* Reviews Section */}
       <ReviewsSection dictionary={dictionary} />

@@ -102,7 +102,7 @@ export default function ReviewsSection({ dictionary }: { dictionary: any }) {
   return (
     <section 
       className="pt-16 pb-12 md:pt-16 md:pb-24 overflow-hidden"
-      style={{ background: 'linear-gradient(to bottom, #F9EFE9 85%, #F0F1EF 100%)' }}
+      style={{ background: '#F9EFE9' }}
     >
 
       {/* ── Header with staggered fade-up ── */}
