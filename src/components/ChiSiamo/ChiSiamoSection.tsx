@@ -49,9 +49,48 @@ function TextCell({ doc, hideBio = false }: { doc: Doctor; hideBio?: boolean }) 
       <p className={`text-[10px] md:text-[9px] uppercase tracking-[0.2em] text-brand-grey/70 font-open-sans ${doc.name === "Dott.ssa Valeria Colombo" ? "mb-0.5 md:leading-normal" : "mb-1.5"} ${(!hasBio && !hideBio) ? "text-center md:text-left" : ""}`}>
         {doc.name === "Dott.ssa Valeria Colombo" ? (
           <>
-            <span className="md:hidden">{doc.role}</span>
+            <span className="md:hidden text-center block">
+              <span className="whitespace-nowrap">MEDICO CHIRURGO</span><br />
+              <span className="whitespace-nowrap">MAXILLO FACCIALE</span><br />·<br />
+              <span className="whitespace-nowrap">MEDICO ESTETICO</span>
+            </span>
             <span className="hidden md:inline">MEDICO CHIRURGO · MAXILLO FACCIALE · MEDICO ESTETICO</span>
           </>
+        ) : doc.name === "Dott.ssa Silvia Bonfiglio" ? (
+          <span className="md:hidden text-center block">{doc.role}</span>
+        ) : doc.name === "Dott. Mario V. Longo" ? (
+          <>
+            <span className="md:hidden text-center block">
+              <span className="whitespace-nowrap">MEDICO CHIRURGO</span><br />·<br />FOUNDER
+            </span>
+            <span className="hidden md:inline">{doc.role}</span>
+          </>
+        ) : doc.name === "Dott. Roberto Logozzo" ? (
+          <>
+            <span className="md:hidden text-center block">
+              ODONTOIATRA<br />·<br />ORTODONZIA<br />&<br />GNATOLOGIA
+            </span>
+            <span className="hidden md:inline">{doc.role}</span>
+          </>
+        ) : doc.name === "Dott. Roberto Berlusconi" ? (
+          <>
+            <span className="md:hidden text-center block">
+              ANESTESIA<br />&<br />RIANIMAZIONE
+            </span>
+            <span className="hidden md:inline">{doc.role}</span>
+          </>
+        ) : doc.name === "Dott.ssa Iole Cucinotto" ? (
+          <>
+            <span className="md:hidden text-center block">
+              <span className="whitespace-nowrap">MEDICO CHIRURGO</span><br />
+              <span className="whitespace-nowrap">ONCOLOGO</span><br />·<br />
+              <span className="whitespace-nowrap">MEDICO ESTETICO</span><br />·<br />
+              <span className="whitespace-nowrap">SOCIO AGORÀ</span>
+            </span>
+            <span className="hidden md:inline">{doc.role}</span>
+          </>
+        ) : doc.name === "Dott. Ruggero Tagliabue" ? (
+          <span className="md:hidden whitespace-nowrap text-center block">{doc.role}</span>
         ) : doc.role}
       </p>
       <h3 className="hidden md:block text-[11px] md:text-lg font-raleway font-bold text-brand-grey uppercase tracking-[0.05em] leading-snug mb-2 md:mb-3">{doc.name}</h3>
