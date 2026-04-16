@@ -42,9 +42,18 @@ function TextCell({ doc, hideBio = false }: { doc: Doctor; hideBio?: boolean }) 
   const hasBio = !!doc.bio && !hideBio;
   const isSpecial = doc.name === "Dott. Roberto Logozzo";
   return (
-    <div className={`flex flex-col h-full bg-[#F6F6F6] ${hasBio ? "pt-2 px-4 pb-3 justify-start" : "p-5 justify-center"}`}>
-      <p className={`text-[10px] md:text-[9px] uppercase tracking-[0.2em] text-brand-grey/70 font-open-sans mb-1.5 ${(!hasBio && !hideBio) ? "text-center md:text-left" : ""}`}>
-        {doc.role}
+    <div className={`flex flex-col h-full bg-[#F6F6F6] ${hasBio ? (doc.name === "Dott.ssa Valeria Colombo" ? "pt-1 px-4 pb-3" : "pt-2 px-4 pb-3") + " justify-start" : "p-5 justify-center"}`}>
+      <p className={`text-[10px] md:text-[9px] uppercase tracking-[0.2em] text-brand-grey/70 font-open-sans ${doc.name === "Dott.ssa Valeria Colombo" ? "mb-0.5 md:leading-normal" : "mb-1.5"} ${(!hasBio && !hideBio) ? "text-center md:text-left" : ""}`}>
+        {doc.name === "Dott.ssa Valeria Colombo" ? (
+          <>
+            <span className="md:hidden">{doc.role}</span>
+            <span className="hidden md:inline">
+              MEDICO CHIRURGO<br />
+              MAXILLO FACCIALE<br />
+              MEDICO ESTETICO
+            </span>
+          </>
+        ) : doc.role}
       </p>
       <h3 className="hidden md:block text-[11px] md:text-lg font-raleway font-bold text-brand-grey uppercase tracking-[0.05em] leading-snug mb-2 md:mb-3">{doc.name}</h3>
       {hasBio && (
@@ -137,7 +146,7 @@ export default function ChiSiamoSection() {
                       <><div className="h-full"><PhotoCell doc={slide[0]} /></div><div className="h-full"><TextCell doc={slide[0]} hideBio /></div></>
                     )}
                   </div>
-                  <div className="bg-[#F6F6F6] p-5 h-full relative overflow-hidden border-t border-white/40">
+                  <div className="bg-[#F6F6F6] p-5 h-full relative overflow-y-auto custom-scrollbar border-t border-white/40">
                     {slide[0].bio ? (
                       <div className="space-y-3">
                         {slide[0].bio.split("\n\n").map((p, i) => (
