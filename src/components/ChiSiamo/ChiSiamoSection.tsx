@@ -7,10 +7,13 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 
 type Doctor = { name: string; role: string; bio: string; photo: string };
 
-// 6 slides: 5 pairs + 1 singleton
+// 7 slides total: 
+// 01: Silvia (Hero), 02: Mario (Hero), 03-06: Pairs, 07: Ruggero (Hero)
 const slides: Doctor[][] = [
   [
     { name: "Dott.ssa Silvia Bonfiglio", role: "Co-Founder", bio: "Co-founder di Studio San Damiano, si avvale di un'esperienza decennale in clinic-management. Dopo una laurea in Fisioterapia, si avvicina alla Medicina Estetica approfondendone i percorsi.\n\nA fine 2021 nasce il progetto di Studio San Damiano, dove la medicina estetica tende a costruire e ricostruire un'armonia e un equilibrio individuale.", photo: "/equipe-medica/dottssa-silvia-bonfiglio.jpg" },
+  ],
+  [
     { name: "Dott. Mario V. Longo", role: "Medico Chirurgo · Founder", bio: "Si occupa di Medicina Estetica e Chirurgia. Docente A.C. del Master Universitario di II Livello di Medicina Estetica del Consorzio Universitario Humanitas.\n\nSocio SIME.", photo: "/equipe-medica/dott-mario-v-longo.jpg" },
   ],
   [
@@ -34,29 +37,60 @@ const slides: Doctor[][] = [
   ],
 ];
 
-const TOTAL = slides.length; // 6
+const TOTAL = slides.length;
 
-// ─── Text cell (shared on mobile and desktop) ───
-function TextCell({ doc }: { doc: Doctor }) {
+function parseName(full: string) {
+  const match = full.match(/^(Dott\.ssa|Dott\.)\s+(.+)$/);
+  return match ? { title: match[1], nameOnly: match[2] } : { title: "", nameOnly: full };
+}
+
+// Fixed-height TextCell matches the aspect ratio of the PhotoCell
+function TextCell({ doc, hideBio = false }: { doc: Doctor; hideBio?: boolean }) {
+  const hasBio = !!doc.bio && !hideBio;
   return (
-    <div className="flex flex-col justify-center p-5 md:p-0">
-      <p className="text-[8px] md:text-[9px] uppercase tracking-[0.2em] text-brand-grey/40 font-open-sans mb-1 md:mb-1.5">{doc.role}</p>
-      <h3 className="text-[11px] md:text-lg font-raleway font-bold text-brand-grey uppercase tracking-[0.05em] leading-snug mb-2 md:mb-3">{doc.name}</h3>
-      {doc.bio && (
-        <div className="space-y-1 md:space-y-2">
-          {doc.bio.split("\n\n").map((p, i) => (
-            <p key={i} className="text-[9px] md:text-[12px] text-brand-grey/55 font-open-sans leading-relaxed line-clamp-4 md:line-clamp-none">{p}</p>
-          ))}
+    <div className={`flex flex-col h-full bg-[#F6F6F6] ${hasBio ? "pt-2 px-4 pb-3 justify-start" : "p-5 justify-center"}`}>
+      <p className={`text-[10px] md:text-[9px] uppercase tracking-[0.2em] text-brand-grey/70 font-open-sans mb-1.5 ${(!hasBio && !hideBio) ? "text-center md:text-left" : ""}`}>
+        {doc.role}
+      </p>
+      <h3 className="hidden md:block text-[11px] md:text-lg font-raleway font-bold text-brand-grey uppercase tracking-[0.05em] leading-snug mb-2 md:mb-3">{doc.name}</h3>
+      {hasBio && (
+        <div className="flex-1 overflow-y-auto pr-1 custom-scrollbar">
+          <div className="space-y-1 md:space-y-2">
+            {doc.bio.split("\n\n").map((p, i) => (
+              <p key={i} className="text-[9px] md:text-[12px] text-brand-grey/55 font-open-sans leading-relaxed">
+                {p}
+              </p>
+            ))}
+          </div>
         </div>
       )}
     </div>
   );
 }
 
-// Splits "Dott. Mario V. Longo" → { title: "Dott.", nameOnly: "Mario V. Longo" }
-function parseName(full: string) {
-  const match = full.match(/^(Dott\.ssa|Dott\.)\s+(.+)$/);
-  return match ? { title: match[1], nameOnly: match[2] } : { title: "", nameOnly: full };
+function PhotoCell({ doc, titleOverlay = true }: { doc: Doctor; titleOverlay?: boolean }) {
+  const { title, nameOnly } = parseName(doc.name);
+  return (
+    <div className="flex flex-col h-full overflow-hidden bg-[#F6F6F6]">
+      <div className="relative flex-1 bg-[#F6E4D8]">
+        <Image
+          src={doc.photo}
+          alt={doc.name}
+          fill
+          className="object-cover object-top grayscale"
+          sizes="50vw"
+        />
+        {titleOverlay && title && (
+          <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/95 via-black/70 to-transparent px-3 pt-20 pb-1.5 text-center">
+            <p className="text-white text-[8px] font-open-sans uppercase tracking-widest">{title}</p>
+          </div>
+        )}
+      </div>
+      <div className="bg-[#5a5a5a] px-3 py-2 text-center shrink-0">
+        <p className="text-white text-[9px] font-open-sans uppercase tracking-wider leading-tight">{nameOnly}</p>
+      </div>
+    </div>
+  );
 }
 
 export default function ChiSiamoSection() {
@@ -110,14 +144,12 @@ export default function ChiSiamoSection() {
     >
       <div className="max-w-[1440px] mx-auto px-8 md:px-[32px]">
 
-        {/* Header */}
         <div className="text-center mb-8 md:mb-12">
           <h2 className="text-3xl md:text-4xl font-raleway font-bold text-brand-grey leading-tight tracking-tight">
             Equipe <span className="text-brand-grey/40">medica.</span>
           </h2>
         </div>
 
-        {/* Slide */}
         <AnimatePresence mode="wait">
           <motion.div
             key={current}
@@ -126,77 +158,55 @@ export default function ChiSiamoSection() {
             exit={{ opacity: 0 }}
             transition={{ duration: 0.5, ease: "easeInOut" }}
           >
-
-            {/* ── MOBILE: griglia 2×2, 4 celle identiche ── */}
-            <div className="md:hidden grid grid-cols-2">
-
-              {/* [0,0] Testo dottore 1 */}
-              <div className="bg-[#F6F6F6] flex flex-col justify-center overflow-hidden">
-                <TextCell doc={slide[0]} />
-              </div>
-
-              {/* [0,1] Foto dottore 1 */}
-              <div className="flex flex-col">
-                <div className="aspect-[4/5] relative overflow-hidden bg-[#F6E4D8]">
-                  <Image
-                    src={slide[0].photo}
-                    alt={slide[0].name}
-                    fill
-                    className="object-cover object-top grayscale"
-                    sizes="50vw"
-                  />
-                  <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/95 via-black/70 to-transparent px-3 pt-20 pb-1.5 text-center">
-                    <p className="text-white text-[8px] font-open-sans uppercase tracking-widest">{parseName(slide[0].name).title}</p>
+            {/* ── MOBILE ── */}
+            <div className="md:hidden aspect-[4/5] w-full overflow-hidden">
+              {slide.length === 1 ? (
+                /* HERO Layout: Silvia, Mario, Tagliabue */
+                <div className="grid grid-rows-2 h-full">
+                  <div className="grid grid-cols-2 h-full">
+                    {/* Even slides: Text Left | Odd slides: Text Right (for variety) */}
+                    {current % 2 === 0 ? (
+                      <>
+                        <div className="h-full"><TextCell doc={slide[0]} hideBio /></div>
+                        <div className="h-full"><PhotoCell doc={slide[0]} /></div>
+                      </>
+                    ) : (
+                      <>
+                        <div className="h-full"><PhotoCell doc={slide[0]} /></div>
+                        <div className="h-full"><TextCell doc={slide[0]} hideBio /></div>
+                      </>
+                    )}
                   </div>
-                </div>
-                <div className="bg-[#5a5a5a] px-3 py-2 text-center">
-                  <p className="text-white text-[9px] font-open-sans uppercase tracking-wider leading-tight">{parseName(slide[0].name).nameOnly}</p>
-                </div>
-              </div>
-
-              {/* [1,0] Foto dottore 2 (o vuoto se singleton) */}
-              {slide[1] ? (
-                <div className="flex flex-col">
-                  <div className="aspect-[4/5] relative overflow-hidden bg-[#F6E4D8]">
-                    <Image
-                      src={slide[1].photo}
-                      alt={slide[1].name}
-                      fill
-                      className="object-cover object-top grayscale"
-                      sizes="50vw"
-                    />
-                    <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/95 via-black/70 to-transparent px-3 pt-20 pb-1.5 text-center">
-                      <p className="text-white text-[8px] font-open-sans uppercase tracking-widest">{parseName(slide[1].name).title}</p>
+                  {/* Lower half: full width description */}
+                  <div className="bg-[#F6F6F6] p-5 h-full overflow-y-auto border-t border-white/40">
+                    <div className="space-y-3">
+                      {slide[0].bio.split("\n\n").map((p, i) => (
+                        <p key={i} className="text-[12px] text-brand-grey/70 font-open-sans leading-relaxed">
+                          {p}
+                        </p>
+                      ))}
                     </div>
                   </div>
-                  <div className="bg-[#5a5a5a] px-3 py-2 text-center">
-                    <p className="text-white text-[9px] font-open-sans uppercase tracking-wider leading-tight">{parseName(slide[1].name).nameOnly}</p>
-                  </div>
                 </div>
               ) : (
-                <div className="aspect-[4/5] bg-[#F6E4D8]" />
-              )}
-
-              {/* [1,1] Testo dottore 2 (o vuoto se singleton) */}
-              {slide[1] ? (
-                <div className="bg-[#F6F6F6] flex flex-col justify-center overflow-hidden">
-                  <TextCell doc={slide[1]} />
+                /* PAIR Layout: Alessandro Sorrenti style */
+                <div className="grid grid-cols-2 grid-rows-2 h-full">
+                  <div className="h-full"><TextCell doc={slide[0]} /></div>
+                  <div className="h-full"><PhotoCell doc={slide[0]} /></div>
+                  <div className="h-full"><PhotoCell doc={slide[1]} /></div>
+                  <div className="h-full"><TextCell doc={slide[1]} /></div>
                 </div>
-              ) : (
-                <div className="bg-[#F6F6F6]" />
               )}
             </div>
 
-            {/* ── DESKTOP: layout flex-row originale ── */}
+            {/* ── DESKTOP ── */}
             <div className="hidden md:flex md:divide-x md:divide-brand-grey/10">
-              {/* Card 1 */}
               <div className="flex flex-row gap-10 items-center flex-1">
                 <div className="relative w-[160px] shrink-0 h-[220px] bg-[#F6E4D8]">
                   <Image src={slide[0].photo} alt={slide[0].name} fill className="object-contain object-bottom grayscale" sizes="160px" />
                 </div>
                 <TextCell doc={slide[0]} />
               </div>
-              {/* Card 2 */}
               {slide[1] && (
                 <div className="flex flex-row gap-10 items-center flex-1 pl-12">
                   <div className="relative w-[160px] shrink-0 h-[220px] bg-[#F6E4D8]">
@@ -205,25 +215,29 @@ export default function ChiSiamoSection() {
                   <TextCell doc={slide[1]} />
                 </div>
               )}
+              {!slide[1] && <div className="md:pl-12 md:flex-1 hidden md:block" />}
             </div>
-
           </motion.div>
         </AnimatePresence>
 
-        {/* Controlli */}
         <div className="mt-8 flex items-center justify-center gap-5">
-          <button onClick={() => navigate(-1)} aria-label="Precedente" className="w-9 h-9 border border-brand-grey/20 flex items-center justify-center hover:bg-brand-grey hover:border-brand-grey transition-colors group shrink-0">
+          <button onClick={() => navigate(-1)} className="w-9 h-9 border border-brand-grey/20 flex items-center justify-center hover:bg-brand-grey hover:border-brand-grey transition-colors group shrink-0">
             <ChevronLeft className="w-4 h-4 text-brand-grey group-hover:text-white" />
           </button>
           <span className="text-[11px] font-open-sans text-brand-grey/35 tracking-widest shrink-0">
             {String(current + 1).padStart(2, "0")} / {String(TOTAL).padStart(2, "0")}
           </span>
-          <button onClick={() => navigate(1)} aria-label="Successivo" className="w-9 h-9 border border-brand-grey/20 flex items-center justify-center hover:bg-brand-grey hover:border-brand-grey transition-colors group shrink-0">
+          <button onClick={() => navigate(1)} className="w-9 h-9 border border-brand-grey/20 flex items-center justify-center hover:bg-brand-grey hover:border-brand-grey transition-colors group shrink-0">
             <ChevronRight className="w-4 h-4 text-brand-grey group-hover:text-white" />
           </button>
         </div>
 
       </div>
+      <style jsx global>{`
+        .custom-scrollbar::-webkit-scrollbar { width: 2px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #5a5a5a20; border-radius: 10px; }
+      `}</style>
     </section>
   );
 }
