@@ -119,15 +119,15 @@ export default function ReviewsSection({ dictionary }: { dictionary: any }) {
           {/* Title */}
           <h2
             style={fadeUp(headerVisible, 120)}
-            className="text-4xl md:text-6xl font-raleway font-bold text-brand-grey leading-tight mb-8 tracking-tight"
+            className="text-4xl md:text-5xl font-raleway font-bold text-brand-grey leading-tight mb-8 tracking-tight"
           >
-            La voce dei<br className="md:hidden" /> <span className="text-brand-grey/40">nostri pazienti.</span>
+            La voce dei<br className="md:hidden" /> <span className="text-brand-grey/40">nostri pazienti</span>
           </h2>
 
           {/* Subtitle */}
           <p
             style={fadeUp(headerVisible, 260)}
-            className="text-brand-grey/80 text-base md:text-xl font-bold leading-relaxed max-w-2xl"
+            className="text-brand-grey/80 text-sm md:text-lg font-bold leading-relaxed max-w-2xl"
           >
             La fiducia delle persone è il nostro miglior biglietto da visita.
           </p>
