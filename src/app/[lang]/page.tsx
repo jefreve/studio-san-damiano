@@ -18,7 +18,10 @@ export default async function Home({
   return (
     <div className="flex flex-col min-h-screen">
       {/* Hero Section */}
-      <section className="bg-[#F6E4D8] pt-12 pb-4 flex flex-col items-center overflow-hidden">
+      <section 
+        className="pt-12 pb-4 flex flex-col items-center overflow-hidden"
+        style={{ background: 'linear-gradient(to bottom, #F6E4D8 0%, #F6E4D8 85%, #FFFFFF 100%)' }}
+      >
         <HeroContent />
       </section>
 
@@ -26,7 +29,10 @@ export default async function Home({
       {/* <UniqueExperienceSection /> */}
 
       {/* Services Section Container */}
-      <section className="bg-white" id="trattamenti-wrapper">
+      <section 
+        className="bg-white" 
+        id="trattamenti-wrapper"
+      >
         <div className="container mx-auto px-0 md:px-[32px]">
            <TreatmentsSection dictionary={dictionary} />
         </div>

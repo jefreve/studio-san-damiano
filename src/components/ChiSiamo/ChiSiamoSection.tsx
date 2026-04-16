@@ -159,7 +159,8 @@ export default function ChiSiamoSection() {
   const slide = activeSlides[current] || activeSlides[0];
 
   return (
-    <section ref={sectionRef} id="equipe" className="bg-white py-12 md:py-16 overflow-hidden" 
+    <section ref={sectionRef} id="equipe" className="py-12 md:py-16 overflow-hidden" 
+      style={{ background: 'linear-gradient(to bottom, #FFFFFF 85%, #F9EFE9 100%)' }}
       onTouchStart={(e) => { touchStartX.current = e.touches[0].clientX; }}
       onTouchEnd={(e) => {
         const diff = touchStartX.current - e.changedTouches[0].clientX;
