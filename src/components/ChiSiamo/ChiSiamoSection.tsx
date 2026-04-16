@@ -164,6 +164,7 @@ export default function ChiSiamoSection() {
                             alt="San Damiano Icon"
                             fill
                             className="object-contain"
+                            sizes="128px"
                           />
                         </motion.div>
                       </div>
