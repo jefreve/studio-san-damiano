@@ -167,8 +167,8 @@ export default function ChiSiamoSection() {
       }}>
       <div className="max-w-[1440px] mx-auto px-8 md:px-[32px]">
         <div className="text-center mb-8 md:mb-12">
-          <h2 className="text-3xl md:text-4xl font-raleway font-bold text-brand-grey leading-tight tracking-tight">
-            Equipe <span className="text-brand-grey/40">medica.</span>
+          <h2 className="text-3xl md:text-4xl font-raleway font-bold leading-tight tracking-tight">
+            <span className="text-[#5A5A5A]">La nostra</span> <span className="text-[#BDBDBD]">equipe medica</span>
           </h2>
         </div>
 
